@@ -6,6 +6,7 @@ pypdf
 sqlalchemy
 pydantic
 openai
+google-generativeai
 python-dotenv
 passlib[bcrypt]
 python-multipart
