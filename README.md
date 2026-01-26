@@ -7,7 +7,7 @@
   <p>
     <img src="https://img.shields.io/badge/FASTAPI-0.100+-05998B?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
     <img src="https://img.shields.io/badge/REACT-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-    <img src="https://img.shields.io/badge/GEMINI-1.5_FLASH-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini" />
+    <img src="https://img.shields.io/badge/GEMINI-2.0_FLASH-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini" />
     <img src="https://img.shields.io/badge/CHROMADB-ACTIVE-yellow?style=for-the-badge&logo=chroma&logoColor=black" alt="ChromaDB" />
   </p>
   
@@ -40,7 +40,7 @@
 ---
 
 ## 🏗️ System Architecture
-The application is built on a high-performance **FastAPI** backbone, utilizing **ChromaDB** for vector storage and **Google Gemini 1.5 Flash** for sophisticated empathetic reasoning.
+The application is built on a high-performance **FastAPI** backbone, utilizing **ChromaDB** for vector storage and **Google Gemini 2.0 Flash** for sophisticated empathetic reasoning.
 
 - **Vector Engine**: Locally indexed clinical research papers.
 - **AI Core**: Gemini 1.5 Pro processing with clinical RAG injection.
