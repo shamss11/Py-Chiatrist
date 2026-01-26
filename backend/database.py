@@ -1,4 +1,4 @@
-from sqlalchemy import create_all, create_engine, func
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
 import os
