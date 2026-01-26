@@ -103,12 +103,12 @@ The app acts as a digital confidant that focuses exclusively on the mental aspec
 
 | Phase | Status | Description |
 | :--- | :---: | :--- |
-| **Phase 1** | ✅ | **Core Architecture**: FastAPI & React boilerplate. |
-| **Phase 2** | ✅ | **Data Ingestion**: PDF parsing logic for academic papers. |
-| **Phase 3** | ✅ | **RAG Pipeline**: Connecting vector search to the AI persona. |
-| **Phase 4** | ✅ | **Sentiment UI**: Mood charts and emotional intensity tracking. |
-| **Phase 5** | ✅ | **Safety Layer**: Crisis resource integration and keyword triggers. |
-| **Phase 6** | 🔮 | **Encryption**: End-to-end encryption for user journal entries. |
+| **Phase 1** | ✅ | **Core Architecture**: Foundation of FastAPI, React, and ChromaDB setup. |
+| **Phase 2** | 🔄 | **RAG & Behavioral Logic**: Mapping clinical context to AI personas via Gemini. |
+| **Phase 3** | 📅 | **Persistence Layer**: Formalizing SQLAlchemy models and Sentiment schemas. |
+| **Phase 4** | 📅 | **Emotional Visualization**: Implementing Recharts for 7-day mood mapping. |
+| **Phase 5** | 📅 | **Safety Guardrails**: Keyphrase crisis detection and emergency routing. |
+| **Phase 6** | � | **Security & Privacy**: E2E encryption for journal entries and metadata. |
 
 ---
 
