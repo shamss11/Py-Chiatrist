@@ -1,45 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --calm-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --primary-orange: #FFB347;
+    --light-orange: #FFD59E;
+    --soft-cream: #FFF8F0;
+    --deep-amber: #E67E22;
+    --muted-brown: #5D4037;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 179, 71, 0.3);
 }
 
 body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--calm-gradient);
-  min-height: 100vh;
-  color: #2D3748;
+    @apply antialiased text-muted-brown;
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFECD2 100%);
+    min-height: 100vh;
 }
 
 .glass-morphism {
-  background: rgba(216, 118, 7, 0.25);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+    @apply bg-white/70 backdrop-blur-lg border border-orange-200/50 rounded-3xl shadow-xl shadow-orange-100/50;
 }
 
-.typing-indicator {
-  display: flex;
-  gap: 4px;
+.orange-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-deep-amber to-primary-orange;
 }
 
-.dot {
-  width: 6px;
-  height: 6px;
-  background: #718096;
-  border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out;
+.btn-primary {
+    @apply bg-gradient-to-r from-deep-amber to-primary-orange text-white px-6 py-3 rounded-2xl hover:shadow-lg hover:shadow-orange-200 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-medium;
 }
 
-.dot:nth-child(1) { animation-delay: -0.32s; }
-.dot:nth-child(2) { animation-delay: -0.16s; }
+.input-glass {
+    @apply w-full bg-white/50 border-2 border-orange-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary-orange transition-all duration-300 placeholder-orange-300/70;
+}
 
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1.0); }
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-soft-cream;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-orange-200 rounded-full hover:bg-orange-300 transition-colors;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
 }

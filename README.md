@@ -88,8 +88,8 @@ Real-time scanning for high-risk keywords with immediate redirection to professi
 | :--- | :---: | :--- |
 | **Phase 1** | ✅ | **Core Architecture**: Foundation of FastAPI, React, and ChromaDB setup. |
 | **Phase 2** | ✅ | **RAG & Behavioral Logic**: Mapping clinical context to AI personas via Gemini. |
-| **Phase 3** | 🔄 | **Persistence Layer**: Formalizing SQLAlchemy models and Sentiment schemas. |
-| **Phase 4** | 📅 | **Emotional Visualization**: Implementing Recharts for 7-day mood mapping. |
+| **Phase 3** | ✅ | **Persistence Layer**: Formalizing SQLAlchemy models and Sentiment schemas. |
+| **Phase 4** | 🔄 | **Emotional Visualization**: Implementing Recharts for 7-day mood mapping. |
 | **Phase 5** | 📅 | **Safety Guardrails**: Keyphrase crisis detection and emergency routing. |
 | **Phase 6** | 📅 | **Security & Privacy**: E2E encryption for journal entries and metadata. |
 

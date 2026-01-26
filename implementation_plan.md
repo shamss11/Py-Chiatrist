@@ -37,9 +37,9 @@ Py-Chiatrist/
 - [ ] Create the RAG prompt template using retrieved clinical context.
 
 ### Phase 3: Database & Mood Analytics
-- [ ] Define SQLAlchemy models: `User`, `Entry`, `Sentiment`.
-- [ ] Implement sentimental analysis (using AI or a lightweight library).
-- [ ] Write the 7-day average mood calculation function.
+- [X] Define SQLAlchemy models: `User`, `Entry`, `Sentiment`.
+- [X] Implement sentimental analysis (using Gemini 2.0).
+- [X] Write the 7-day average mood calculation function.
 
 ### Phase 4: Premium "Calm" UI
 - [ ] Bootstrap React app with Vite and Tailwind CSS.

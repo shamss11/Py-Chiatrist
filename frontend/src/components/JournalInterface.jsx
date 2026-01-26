@@ -7,7 +7,8 @@ const JournalInterface = ({ onResponse }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (!entry.trim()) return;
 
         setIsLoading(true);
@@ -34,53 +35,56 @@ const JournalInterface = ({ onResponse }) => {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
-            <div className="glass-morphism p-8 space-y-4">
-                <h2 className="text-2xl font-light text-deep-teal flex items-center gap-2">
-                    <Heart className="w-6 h-6 text-sage" />
-                    How are you feeling today?
-                </h2>
+        <div className="w-full max-w-4xl mx-auto">
+            <div className="glass-morphism p-10 space-y-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
-                <textarea
-                    className="w-full h-64 p-4 bg-white/50 border border-white/20 rounded-xl focus:ring-2 focus:ring-sage focus:border-transparent outline-none transition-all resize-none text-lg font-light leading-relaxed"
-                    placeholder="Start writing your thoughts here..."
-                    value={entry}
-                    onChange={(e) => setEntry(e.target.value)}
-                    disabled={isLoading}
-                />
-
-                <div className="flex justify-between items-center">
-                    <p className="text-xs text-gray-500 italic">
-                        Your thoughts are safe and encrypted.
-                    </p>
-
-                    <button
-                        onClick={handleSubmit}
-                        disabled={isLoading || !entry.trim()}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${isLoading
-                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                            : 'bg-sage text-white hover:bg-deep-teal shadow-lg hover:shadow-xl active:scale-95'
-                            }`}
-                    >
-                        {isLoading ? (
-                            <div className="typing-indicator">
-                                <div className="dot"></div>
-                                <div className="dot"></div>
-                                <div className="dot"></div>
-                            </div>
-                        ) : (
-                            <>
-                                <Sparkles className="w-4 h-4" />
-                                Capture Entry
-                            </>
-                        )}
-                    </button>
+                <div className="flex items-center gap-4 border-b border-orange-100 pb-6">
+                    <Heart className="w-8 h-8 text-deep-amber animate-pulse" />
+                    <div>
+                        <h2 className="text-2xl font-light text-deep-amber">How are you feeling today?</h2>
+                        <p className="text-sm text-orange-400 font-light italic">Your thoughts are safe and encrypted.</p>
+                    </div>
                 </div>
 
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <textarea
+                        value={entry}
+                        onChange={(e) => setEntry(e.target.value)}
+                        placeholder="Start writing your thoughts here..."
+                        className="input-glass min-h-[200px] resize-none text-lg font-light"
+                        disabled={isLoading}
+                    />
+
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2 text-orange-400/60">
+                            <ShieldAlert className="w-4 h-4" />
+                            <span className="text-xs uppercase tracking-widest font-medium">Harden Usage Active</span>
+                        </div>
+                        <button
+                            type="submit"
+                            disabled={isLoading || !entry.trim()}
+                            className="btn-primary flex items-center gap-3 shadow-orange-200"
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    Analyzing...
+                                </span>
+                            ) : (
+                                <>
+                                    <Sparkles className="w-5 h-5" />
+                                    Capture Entry
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </form>
+
                 {error && (
-                    <div className="text-red-500 text-sm mt-2 flex items-center gap-2">
-                        <ShieldAlert className="w-4 h-4" />
-                        {error}
+                    <div className="p-4 bg-red-50/50 border border-red-100 rounded-2xl flex items-start gap-3 text-red-500 text-sm animate-in shake duration-500">
+                        <ShieldAlert className="w-5 h-5 mt-0.5" />
+                        <p>{error}</p>
                     </div>
                 )}
             </div>
