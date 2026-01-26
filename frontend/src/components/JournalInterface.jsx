@@ -15,7 +15,7 @@ const JournalInterface = ({ onResponse }) => {
 
         try {
             // Assuming user_id: 1 for demo purposes
-            const response = await axios.post('http://localhost:8000/journal/submit', {
+            const response = await axios.post('http://127.0.0.1:8000/journal/submit', {
                 user_id: 1,
                 content: entry
             });
@@ -23,7 +23,10 @@ const JournalInterface = ({ onResponse }) => {
             onResponse(response.data);
             setEntry('');
         } catch (err) {
-            setError('Failed to connect to the AI guide. Please ensure the backend is running.');
+            const errorMsg = err.response
+                ? `Error ${err.response.status}: ${JSON.stringify(err.response.data)}`
+                : err.message;
+            setError(`Failed to connect to the AI guide: ${errorMsg}`);
             console.error(err);
         } finally {
             setIsLoading(false);
@@ -55,8 +58,8 @@ const JournalInterface = ({ onResponse }) => {
                         onClick={handleSubmit}
                         disabled={isLoading || !entry.trim()}
                         className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${isLoading
-                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                : 'bg-sage text-white hover:bg-deep-teal shadow-lg hover:shadow-xl active:scale-95'
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'bg-sage text-white hover:bg-deep-teal shadow-lg hover:shadow-xl active:scale-95'
                             }`}
                     >
                         {isLoading ? (

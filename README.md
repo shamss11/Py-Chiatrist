@@ -1,105 +1,87 @@
 <div align="center">
-  <br />
-  <h1>🧠 P Y - C H I A T R I S T</h1>
-  <h3>AI-Powered Behavioral Health & Clinical Journaling</h3>
+  <img src="./logo.png" width="200" alt="Py-Chiatrist Logo" />
+  
+  <h1>🧠 PY-CHIATRIST</h1>
+  <p><b>AI-Powered Behavioral Health & Clinical Journaling</b></p>
+
+  <p>
+    <img src="https://img.shields.io/badge/FASTAPI-0.100+-05998B?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/REACT-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+    <img src="https://img.shields.io/badge/GEMINI-1.5_FLASH-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini" />
+    <img src="https://img.shields.io/badge/CHROMADB-ACTIVE-yellow?style=for-the-badge&logo=chroma&logoColor=black" alt="ChromaDB" />
+  </p>
   
   <p>
-    <a href="https://www.python.org"><img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" /></a>
-    <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.100+-05998B?style=for-the-badge&logo=fastapi" alt="FastAPI" /></a>
-    <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" /></a>
-    <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind" /></a>
-    <a href="https://www.langchain.com/"><img src="https://img.shields.io/badge/RAG-LangChain-white?style=for-the-badge&logo=chainlink" alt="RAG" /></a>
+    <img src="https://img.shields.io/badge/PREMIUM_ENGINE-RAG-blue?style=for-the-badge" alt="Engine" />
+    <img src="https://img.shields.io/badge/SAFETY-ACTIVE-success?style=for-the-badge" alt="Safety" />
+    <img src="https://img.shields.io/badge/LICENSE-MIT-gray?style=for-the-badge" alt="License" />
   </p>
 
-  <p><i>Evidence-based mental health guidance fueled by academic research.</i></p>
-  
   <br />
+
+  <p><i>Building the future of personal mental wellness through academic context and clinical intelligence.</i></p>
 </div>
 
 <hr />
 
-## 🌟 Overview
+## 📖 Table of Contents
+- [🔭 The Vision](#-the-vision)
+- [🏗️ System Architecture](#-system-architecture)
+- [🚀 Key Features](#-key-features)
+- [🛠️ Tech Stack](#-tech-stack)
+- [📅 Project Roadmap](#-project-roadmap)
+- [⚡ Getting Started](#-getting-started)
 
+<hr />
+
+## 🔭 The Vision
 **Py-Chiatrist** is an intelligent journaling platform designed to bridge the gap between personal reflection and clinical psychology. By utilizing **Retrieval-Augmented Generation (RAG)**, Py-Chiatrist grounds every conversation in verified behavioral health data sourced from prestigious institutions like **Harvard** and **Oxford**.
 
-The app acts as a digital confidant that focuses exclusively on the mental aspect of well-being. It provides users with a safe space to "vent" through journaling while receiving guidance rooted in behavioral psychology and clinical research—ensuring a more effective and informed support experience.
+---
+
+## 🏗️ System Architecture
+The application is built on a high-performance **FastAPI** backbone, utilizing **ChromaDB** for vector storage and **Google Gemini 1.5 Flash** for sophisticated empathetic reasoning.
+
+- **Vector Engine**: Locally indexed clinical research papers.
+- **AI Core**: Gemini 1.5 Pro processing with clinical RAG injection.
+- **Safety Interceptor**: Real-time regex scan for crisis intervention.
 
 ---
 
 ## 🚀 Key Features
 
-### 📚 **Clinical Knowledge Retrieval**
-- **Academic RAG**: Intelligently queries a vector database of peer-reviewed papers to provide contextually relevant psychological insights.
-- **Fact-Based Guidance**: Explains the "why" behind emotions using established behavioral science rather than generic AI responses.
+### 📚 Clinical Knowledge Retrieval
+Intelligently queries a vector database of peer-reviewed papers to provide contextually relevant psychological insights.
 
-### ✍️ **Intelligent Journaling Interface**
-- **Conversational "Doctor"**: A seamless chat experience that uses Socratic questioning to help users explore their thoughts.
-- **Strictly Mental Health**: Engineered to identify and deflect physical health queries, maintaining a clear focus on psychological support.
+### ✍️ Intelligent Journaling Interface
+A seamless, glassmorphism-styled chat experience that uses empathetic analysis to help users explore their thoughts.
 
-### 📊 **Behavioral Pattern Analysis**
-- **Sentiment Tracking**: Analyzes journal entries to detect primary emotions, intensity, and potential triggers.
-- **Mood Visualization**: Offers users a clear look at their mental health trajectory over time through interactive dashboards.
+### 📊 Behavioral Pattern Analysis
+Analyzes journal entries to detect primary emotions, intensity, and potential triggers with interactive visualization.
 
-### 🛡️ **Safety & Ethics Layer**
-- **Crisis Interceptor**: Real-time scanning for high-risk keywords with immediate redirection to professional emergency resources.
-- **Privacy First**: Sensitive journal data is handled with local-first logic and secure storage practices.
+### 🛡️ Safety & Ethics Layer
+Real-time scanning for high-risk keywords with immediate redirection to professional emergency resources.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
 **Frontend**
-* **Framework**: React 19
-* **Styling**: Tailwind CSS & Minimalist "Calm" Design
-* **Visualization**: Recharts for emotional trend analysis
-* **State**: React Hooks & Context API
+- React 19 (Vite)
+- Tailwind CSS
+- Recharts (Visualization)
+- Lucide-React (Icons)
 
-**Backend & AI**
-* **Language**: Python 3.10+
-* **API Framework**: FastAPI
-* **Orchestration**: LangChain (RAG Pipeline)
-* **Vector DB**: ChromaDB or FAISS
-* **AI Model**: Google Gemini 1.5 Pro / GPT-4o Integration
-
-**Infrastructure**
-* **Database**: SQLite/PostgreSQL (via SQLAlchemy)
-* **Embedding Model**: Sentence-Transformers (all-MiniLM-L6-v2)
-* **Version Control**: Git / GitHub
+**Backend**
+- Python 3.10+
+- FastAPI
+- Google Generative AI (Gemini)
+- ChromaDB (Vector Search)
+- SQLAlchemy (ORM)
 
 ---
 
-## ⚡ Getting Started
-
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/shamss11/Py-Chiatrist.git
-    cd py-chiatrist
-    ```
-
-2.  **Environment Setup**
-    Create a `.env` file in the `/backend` directory:
-    ```env
-    LLM_API_KEY="your_api_key_here"
-    DATABASE_URL="sqlite:///./therapy.db"
-    ```
-
-3.  **Install & Run Backend**
-    ```bash
-    cd backend
-    pip install -r requirements.txt
-    python main.py
-    ```
-
-4.  **Install & Run Frontend**
-    ```bash
-    cd frontend
-    npm install
-    npm run dev
-    ```
-
----
-
-## 🗺️ Roadmap
+## � Project Roadmap
 
 | Phase | Status | Description |
 | :--- | :---: | :--- |
@@ -108,17 +90,32 @@ The app acts as a digital confidant that focuses exclusively on the mental aspec
 | **Phase 3** | 📅 | **Persistence Layer**: Formalizing SQLAlchemy models and Sentiment schemas. |
 | **Phase 4** | 📅 | **Emotional Visualization**: Implementing Recharts for 7-day mood mapping. |
 | **Phase 5** | 📅 | **Safety Guardrails**: Keyphrase crisis detection and emergency routing. |
-| **Phase 6** | � | **Security & Privacy**: E2E encryption for journal entries and metadata. |
+| **Phase 6** | 📅 | **Security & Privacy**: E2E encryption for journal entries and metadata. |
 
 ---
 
-## 🤝 Contribution Workflow
+## ⚡ Getting Started
 
-We utilize a structured Git strategy to maintain code integrity.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/shamss11/Py-Chiatrist.git
+   cd py-chiatrist
+   ```
 
-* `master`: **Production**. Stable releases only.
-* `dev-backend`: Feature development for RAG, API, and DB logic.
-* `dev-frontend`: UI/UX enhancements and dashboard visualization.
+2. **Environment Setup**
+   Create a `.env` file in the `/backend` directory:
+   ```env
+   GEMINI_API_KEY="your_api_key_here"
+   ```
+
+3. **Install & Run**
+   ```bash
+   # Backend
+   cd backend && python3 -m uvicorn main:app --reload
+
+   # Frontend
+   cd ../frontend && npm install && npm run dev
+   ```
 
 ---
 
