@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
-import openai
+import google.generativeai as genai
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,14 +19,19 @@ app = FastAPI(title="Py-Chiatrist API")
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development, allow all. Change this for production.
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Setup OpenAI
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Setup Gemini
+genai.configure(api_key=os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY"))
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Py-Chiatrist API is running"}
 
 class JournalSubmission(BaseModel):
     user_id: int
@@ -38,9 +43,11 @@ def startup_event():
 
 @app.post("/journal/submit")
 async def submit_journal(submission: JournalSubmission, db: Session = Depends(get_db)):
+    print(f"Received submission: {submission.content[:50]}...")
     # 1. Safety Check
     is_crisis, crisis_msg = safety_interceptor(submission.content)
     if is_crisis:
+        print("Crisis detected!")
         return {"response": crisis_msg, "is_crisis": True}
 
     # 2. Retrieve Clinical Context
@@ -56,15 +63,10 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
     )
 
     try:
-        # 4. Get AI Response
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": submission.content}
-            ]
-        )
-        ai_msg = response.choices[0].message.content
+        # 4. Get AI Response from Gemini
+        prompt = f"System: {system_prompt}\nUser: {submission.content}"
+        response = model.generate_content(prompt)
+        ai_msg = response.text
 
         # 5. Extract Sentiment (simplified for demonstration)
         # In a real app, you might do a second call or use a regex to parse a structured response
