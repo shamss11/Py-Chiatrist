@@ -27,7 +27,7 @@ app.add_middleware(
 
 # Setup Gemini
 genai.configure(api_key=os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 @app.get("/")
 async def root():
