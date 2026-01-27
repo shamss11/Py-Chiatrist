@@ -3,7 +3,7 @@ import { BookOpen, GraduationCap, Database, Search, ShieldCheck, Globe, Star, In
 
 const ClinicalBasis = () => {
     const sources = [
-        { name: 'Harvard Medical School', focus: 'Behavioral Genetics & Mood Disorders', cite: 'HMS Dept of Psychiatry', url: 'https://psychiatry.hms.harvard.edu/' },
+        { name: 'Harvard Medical School', focus: 'Behavioral Genetics & Mood Disorders', cite: 'HMS Dept of Psychiatry', url: 'https://psych.hms.harvard.edu/' },
         { name: 'University of Oxford', focus: 'Cognitive Behavioral Research Unit', cite: 'CBT Research Oxford', url: 'https://www.psych.ox.ac.uk/' },
         { name: 'Johns Hopkins Medicine', focus: 'Affective Disorder Clinical Service', cite: 'JH Affective Neuro', url: 'https://www.hopkinsmedicine.org/psychiatry' },
         { name: 'Stanford Medicine', focus: 'Precision Mental Health & Wellness', cite: 'Stanford Wellness', url: 'https://psychiatry.stanford.edu/' },
