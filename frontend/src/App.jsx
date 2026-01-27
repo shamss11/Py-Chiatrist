@@ -69,7 +69,7 @@ function App() {
                         <div className="bg-gradient-to-br from-[#FFB347] to-[#E67E22] p-2.5 rounded-xl shadow-lg shadow-orange-200 group-hover:scale-110 transition-transform duration-500">
                             <Brain className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-2xl font-bold tracking-tight text-[#2D241E]">
+                        <span className="text-xl font-bold tracking-tight text-[#2D241E] whitespace-nowrap">
                             Py-Chiatrist
                         </span>
                     </div>
