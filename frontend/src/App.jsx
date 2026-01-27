@@ -43,7 +43,10 @@ function App() {
             {/* Professional Navbar */}
             <nav className="nav-blur">
                 <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-4 group cursor-pointer">
+                    <div
+                        onClick={() => setActiveTab('home')}
+                        className="flex items-center gap-4 group cursor-pointer"
+                    >
                         <div className="bg-gradient-to-br from-[#FFB347] to-[#E67E22] p-2.5 rounded-xl shadow-lg shadow-orange-200 group-hover:scale-110 transition-transform duration-500">
                             <Brain className="w-6 h-6 text-white" />
                         </div>
