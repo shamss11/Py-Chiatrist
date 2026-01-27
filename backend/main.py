@@ -253,27 +253,27 @@ async def get_suggested_prompts(user_id: int, db: Session = Depends(get_db)):
     prompt = (
         "You are a clinical journaling assistant. Below are a user's recent journal entries:\n\n"
         f"{history_context}\n\n"
-        "Based on these 'answers', generate 3 highly personalized, open-ended 'Suggested Focus' prompts. "
-        "The goal is to help them explore recurring themes or resolve unspoken tensions. "
-        "Keep each prompt under 15 words. Format: Just return the prompts separated by newlines, no numbers."
+        "Based on these 'answers', generate 3 highly personalized 'Suggested Focus' items. "
+        "For each item, provide:\n"
+        "1. A focus question (under 15 words)\n"
+        "2. A 'starter' sentence that helps them begin writing (e.g., 'Looking back at that moment, I realize...')\n\n"
+        "Format: Return a JSON list of objects with keys 'prompt' and 'starter'. No other text."
     )
 
     try:
         response = model.generate_content(prompt)
-        ai_prompts = [p.strip() for p in response.text.split("\n") if p.strip()]
-        return ai_prompts[:3]
+        # Clean up in case Gemini wraps in ```json
+        text = response.text.strip()
+        if text.startswith("```json"):
+            text = text[7:-3].strip()
+        import json
+        return json.loads(text)[:3]
     except Exception as e:
         print(f"AI Prompt generation failed: {e}")
-        # Fallback to simple emotion-based logic if AI fails
-        top_sentiment = db.query(Sentiment)\
-            .join(Entry, Sentiment.entry_id == Entry.id)\
-            .filter(Entry.user_id == user_id)\
-            .order_by(Entry.created_at.desc())\
-            .first()
-        
-        if top_sentiment and top_sentiment.primary_emotion.lower() == "anxiety":
-            return ["What is one small thing you can control right now?", "Write about a time you handled a similar stress."]
-        return ["What is the main theme of your thoughts today?", "How do you want to feel by the end of tomorrow?"]
+        return [
+            {"prompt": "What's on your mind today?", "starter": "Right now, I'm thinking about..."},
+            {"prompt": "How are you feeling?", "starter": "Today has felt..."},
+        ]
 
 if __name__ == "__main__":
     import uvicorn

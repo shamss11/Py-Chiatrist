@@ -31,7 +31,7 @@ const JournalInterface = ({ onResponse }) => {
 
         try {
             const finalContent = selectedPrompt
-                ? `Prompt: ${selectedPrompt}\n\nReflection: ${entry}`
+                ? `Prompt: ${selectedPrompt.prompt}\n\nReflection: ${entry}`
                 : entry;
 
             const response = await axios.post('http://127.0.0.1:8000/journal/submit', {
@@ -82,15 +82,15 @@ const JournalInterface = ({ onResponse }) => {
                         <div className="space-y-4 pt-4">
                             <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#E67E22] mb-3">Suggested Focus</h4>
                             <div className="space-y-3">
-                                {prompts.map((prompt, i) => (
+                                {prompts.map((item, i) => (
                                     <button
                                         key={i}
                                         type="button"
-                                        onClick={() => setSelectedPrompt(prompt)}
-                                        className={`w-full text-left p-4 rounded-xl border transition-all group ${selectedPrompt === prompt ? 'bg-orange-50 border-orange-200' : 'bg-white border-orange-100 hover:border-orange-300 hover:shadow-md'}`}
+                                        onClick={() => setSelectedPrompt(item)}
+                                        className={`w-full text-left p-4 rounded-xl border transition-all group ${selectedPrompt?.prompt === item.prompt ? 'bg-orange-50 border-orange-200' : 'bg-white border-orange-100 hover:border-orange-300 hover:shadow-md'}`}
                                     >
                                         <p className="text-sm text-text-main group-hover:text-primary-dark transition-colors font-light leading-relaxed">
-                                            {prompt}
+                                            {item.prompt}
                                         </p>
                                     </button>
                                 ))}
@@ -116,7 +116,7 @@ const JournalInterface = ({ onResponse }) => {
                                     <div className="mb-6 p-6 rounded-2xl bg-orange-50 border border-orange-100 flex justify-between items-start animate-slide-up">
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-bold uppercase tracking-widest text-primary-dark opacity-60">Focusing on:</p>
-                                            <p className="text-lg text-text-main font-medium leading-relaxed italic">"{selectedPrompt}"</p>
+                                            <p className="text-lg text-text-main font-medium leading-relaxed italic">"{selectedPrompt.prompt}"</p>
                                         </div>
                                         <button
                                             type="button"
@@ -130,7 +130,7 @@ const JournalInterface = ({ onResponse }) => {
                                 <textarea
                                     value={entry}
                                     onChange={(e) => setEntry(e.target.value)}
-                                    placeholder="I've been feeling a bit overwhelmed lately because..."
+                                    placeholder={selectedPrompt?.starter || "I've been feeling a bit overwhelmed lately because..."}
                                     className="textarea-pro min-h-[400px] lg:min-h-[500px]"
                                     disabled={isLoading}
                                 />
