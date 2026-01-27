@@ -230,46 +230,50 @@ async def get_trigger_distribution(user_id: int, db: Session = Depends(get_db)):
 
 @app.get("/user/{user_id}/suggested-prompts")
 async def get_suggested_prompts(user_id: int, db: Session = Depends(get_db)):
-    """Generates personalized reflection prompts based on recent mood."""
+    """Generates personalized reflection prompts using AI based on history."""
     from datetime import datetime, timedelta
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     
-    sentiments = db.query(Sentiment)\
-        .join(Entry, Sentiment.entry_id == Entry.id)\
+    # Get recent entries for context
+    recent_entries = db.query(Entry)\
         .filter(Entry.user_id == user_id)\
-        .filter(Entry.created_at >= seven_days_ago)\
+        .order_by(Entry.created_at.desc())\
+        .limit(5)\
         .all()
     
-    if not sentiments:
-        return ["What are three things you're grateful for today?", "Describe a moment today when you felt at peace."]
-
-    emotions = [s.primary_emotion.lower() for s in sentiments]
-    top_emotion = max(set(emotions), key=emotions.count)
-    
-    prompts = {
-        "anxiety": [
-            "What is one thing within your control that you can focus on today?",
-            "Describe the physical sensations of your anxiety and imagine them as passing clouds.",
-            "Write about a time you overcame a similar worry."
-        ],
-        "sadness": [
-            "What is a small activity that has brought you comfort in the past?",
-            "If you could say one kind thing to yourself right now, what would it be?",
-            "Write about a person or memory that makes you feel safe."
-        ],
-        "anger": [
-            "What boundary of yours felt crossed today?",
-            "How can you channel this energy into a productive task?",
-            "Write a letter (that you won't send) to the person or situation causing this heat."
-        ],
-        "happiness": [
-            "What specific moment today sparked joy for you?",
-            "How can you replicate this feeling later in the week?",
-            "Who can you share this positive energy with today?"
+    if not recent_entries:
+        return [
+            "What is one thing you're looking forward to this week?",
+            "Describe a moment today that made you feel peaceful."
         ]
-    }
+
+    # Build a context string from recent entries
+    history_context = "\n---\n".join([e.content for e in recent_entries])
     
-    return prompts.get(top_emotion, ["What is the main theme of your thoughts today?", "How do you want to feel by the end of tomorrow?"])
+    prompt = (
+        "You are a clinical journaling assistant. Below are a user's recent journal entries:\n\n"
+        f"{history_context}\n\n"
+        "Based on these 'answers', generate 3 highly personalized, open-ended 'Suggested Focus' prompts. "
+        "The goal is to help them explore recurring themes or resolve unspoken tensions. "
+        "Keep each prompt under 15 words. Format: Just return the prompts separated by newlines, no numbers."
+    )
+
+    try:
+        response = model.generate_content(prompt)
+        ai_prompts = [p.strip() for p in response.text.split("\n") if p.strip()]
+        return ai_prompts[:3]
+    except Exception as e:
+        print(f"AI Prompt generation failed: {e}")
+        # Fallback to simple emotion-based logic if AI fails
+        top_sentiment = db.query(Sentiment)\
+            .join(Entry, Sentiment.entry_id == Entry.id)\
+            .filter(Entry.user_id == user_id)\
+            .order_by(Entry.created_at.desc())\
+            .first()
+        
+        if top_sentiment and top_sentiment.primary_emotion.lower() == "anxiety":
+            return ["What is one small thing you can control right now?", "Write about a time you handled a similar stress."]
+        return ["What is the main theme of your thoughts today?", "How do you want to feel by the end of tomorrow?"]
 
 if __name__ == "__main__":
     import uvicorn

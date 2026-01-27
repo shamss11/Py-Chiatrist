@@ -8,15 +8,16 @@ const JournalInterface = ({ onResponse }) => {
     const [error, setError] = useState(null);
     const [prompts, setPrompts] = useState([]);
 
+    const fetchPrompts = async () => {
+        try {
+            const res = await axios.get('http://127.0.0.1:8000/user/1/suggested-prompts');
+            setPrompts(res.data);
+        } catch (err) {
+            console.error("Failed to fetch prompts:", err);
+        }
+    };
+
     React.useEffect(() => {
-        const fetchPrompts = async () => {
-            try {
-                const res = await axios.get('http://127.0.0.1:8000/user/1/suggested-prompts');
-                setPrompts(res.data);
-            } catch (err) {
-                console.error("Failed to fetch prompts:", err);
-            }
-        };
         fetchPrompts();
     }, []);
 
@@ -34,6 +35,7 @@ const JournalInterface = ({ onResponse }) => {
             });
             onResponse(response.data);
             setEntry('');
+            fetchPrompts(); // Refresh prompts based on the new entry
         } catch (err) {
             const errorMsg = err.response
                 ? `Error ${err.response.status}: ${JSON.stringify(err.response.data)}`
