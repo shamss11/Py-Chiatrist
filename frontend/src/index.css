@@ -74,6 +74,10 @@
     .nav-link-active {
         @apply bg-orange-50 text-orange-700;
     }
+
+    .textarea-pro {
+        @apply w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-2xl font-light leading-relaxed text-text-main placeholder-text-muted/20 resize-none transition-all duration-300;
+    }
 }
 
 /* Custom Scrollbar */

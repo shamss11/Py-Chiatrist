@@ -76,7 +76,7 @@ const JournalInterface = ({ onResponse }) => {
                                     value={entry}
                                     onChange={(e) => setEntry(e.target.value)}
                                     placeholder="I've been feeling a bit overwhelmed lately because..."
-                                    className="input-glass min-h-[350px] lg:min-h-[450px] resize-none text-xl leading-relaxed font-light shadow-none border-none placeholder-text-muted/40"
+                                    className="textarea-pro min-h-[400px] lg:min-h-[500px]"
                                     disabled={isLoading}
                                 />
                             </div>
