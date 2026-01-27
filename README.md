@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./logo.png" width="200" alt="Py-Chiatrist Logo" />
+  <img src="./assets/brain_logo.png" width="180" alt="Py-Chiatrist Logo" />
   
   
   <p><b>AI-Powered Behavioral Health & Clinical Journaling</b></p>
