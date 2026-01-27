@@ -1,4 +1,5 @@
 <div align="center">
+  <h1>Py-Chiatrist 🩺</h1>
   <p><b>AI-Powered Behavioral Health & Clinical Journaling</b></p>
 
   <p>
