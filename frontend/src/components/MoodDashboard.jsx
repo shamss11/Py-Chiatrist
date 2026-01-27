@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell } from 'recharts';
-import { TrendingUp, Smile, Calendar, Target, Activity } from 'lucide-react';
+import { TrendingUp, Smile, Calendar, Target, Activity, Download } from 'lucide-react';
 import axios from 'axios';
+import { exportToPDF } from '../utils/pdfExport';
 
 const TriggerChart = ({ refreshTrigger }) => {
     const [data, setData] = useState([]);
@@ -74,6 +75,60 @@ const TriggerChart = ({ refreshTrigger }) => {
     );
 };
 
+const MoodPrediction = ({ refreshTrigger }) => {
+    const [prediction, setPrediction] = useState(null);
+    const [status, setStatus] = useState('loading');
+
+    useEffect(() => {
+        const fetchPrediction = async () => {
+            try {
+                const res = await axios.get('http://127.0.0.1:8000/user/1/mood-prediction');
+                setPrediction(res.data.prediction);
+                setStatus(res.data.status);
+            } catch (err) {
+                console.error("Failed to fetch prediction:", err);
+            }
+        };
+        fetchPrediction();
+    }, [refreshTrigger]);
+
+    if (status === 'accumulating') return null;
+
+    return (
+        <div className="card-premium p-10 bg-gradient-to-br from-[#2D241E] to-[#453830] text-white space-y-6">
+            <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold flex items-center gap-3 text-orange-400">
+                    <TrendingUp className="w-5 h-5" />
+                    Emotional Trajectory Forecast
+                </h3>
+                <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-200">
+                    AI Predictive Engine
+                </div>
+            </div>
+
+            {status === 'loading' ? (
+                <div className="animate-pulse space-y-3">
+                    <div className="h-4 bg-white/10 rounded w-3/4"></div>
+                    <div className="h-4 bg-white/10 rounded w-1/2"></div>
+                </div>
+            ) : (
+                <p className="text-lg font-light leading-relaxed italic opacity-90 border-l-2 border-orange-500/30 pl-6">
+                    "{prediction}"
+                </p>
+            )}
+
+            <div className="pt-4 border-t border-white/10 flex items-center gap-4 text-[10px] uppercase tracking-widest text-orange-200/50 font-bold">
+                <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    Clinical Pattern Synthesis Active
+                </div>
+                <div className="h-1 w-1 bg-orange-500/50 rounded-full"></div>
+                <span>Next 72 Hours</span>
+            </div>
+        </div>
+    );
+};
+
 const MoodDashboard = ({ refreshTrigger }) => {
     const [data, setData] = useState([]);
     const [insights, setInsights] = useState(null);
@@ -105,7 +160,17 @@ const MoodDashboard = ({ refreshTrigger }) => {
     );
 
     return (
-        <div className="w-full max-w-6xl mx-auto space-y-8 animate-slide-up">
+        <div id="mood-dashboard-report" className="w-full max-w-6xl mx-auto space-y-8 animate-slide-up bg-[#FFFBF5] p-4">
+            <div className="flex justify-end pr-4">
+                <button
+                    onClick={() => exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`)}
+                    className="flex items-center gap-2 px-6 py-3 bg-white border border-orange-100 rounded-2xl text-primary-dark font-bold text-xs tracking-widest uppercase hover:bg-orange-50 transition-all shadow-sm"
+                >
+                    <Download className="w-4 h-4" />
+                    Download Clinical Report
+                </button>
+            </div>
+
             <div className="grid lg:grid-cols-4 gap-8">
                 {/* Visual Overview */}
                 <div className="lg:col-span-3 card-premium p-10 space-y-10">
@@ -205,6 +270,9 @@ const MoodDashboard = ({ refreshTrigger }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Prediction Section */}
+            <MoodPrediction refreshTrigger={refreshTrigger} />
 
             {/* Trigger Chart Section */}
             <TriggerChart refreshTrigger={refreshTrigger} />

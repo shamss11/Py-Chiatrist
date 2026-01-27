@@ -25,8 +25,17 @@ def get_relevant_context(user_query, n_results=3):
         n_results=n_results
     )
     
-    # Flatten the list of documents and return
-    return results['documents'][0] if results['documents'] else []
+    # Flatten the list of documents and metadatas, then return as a list of dicts
+    if not results['documents'] or not results['documents'][0]:
+        return []
+        
+    contexts = []
+    for doc, meta in zip(results['documents'][0], results['metadatas'][0]):
+        contexts.append({
+            "content": doc,
+            "source": meta.get("source", "Unknown Source")
+        })
+    return contexts
 
 if __name__ == "__main__":
     # Test the search

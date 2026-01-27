@@ -52,14 +52,14 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
 
     # 2. Retrieve Clinical Context
     clinical_context = get_relevant_context(submission.content)
-    context_str = "\n".join(clinical_context)
+    context_str = "\n".join([f"Source: {c['source']}\nContent: {c['content']}" for c in clinical_context])
 
     # 3. Construct RAG Prompt
-    # We'll ask Gemini to return a structured response for sentiment
     system_prompt = (
-        "You are an AI mental health guide. Use the following clinical research to guide the user: "
-        f"[{context_str}]. "
+        "You are an AI mental health guide. Use the following clinical research to guide the user:\n"
+        f"{context_str}\n\n"
         "Do not give physical medical advice. Be empathetic, non-judgmental, and supportive. "
+        "IMPORTANT: When referencing research, mention the specific source (e.g., 'According to the Harvard Study...'). "
         "\n\nCRITICAL: At the very end of your response, provide a JSON-formatted block for sentiment analysis like this: "
         "SENTIMENT_DATA: {\"emotion\": \"string\", \"intensity\": float_1_to_10, \"triggers\": \"1-2 words only, comma separated\"}"
     )
@@ -274,6 +274,66 @@ async def get_suggested_prompts(user_id: int, db: Session = Depends(get_db)):
             {"prompt": "What's on your mind today?", "starter": "Right now, I'm thinking about..."},
             {"prompt": "How are you feeling?", "starter": "Today has felt..."},
         ]
+
+@app.get("/user/{user_id}/mood-prediction")
+async def get_mood_prediction(user_id: int, db: Session = Depends(get_db)):
+    """Predicts next 3 days of mood based on history."""
+    entries = db.query(Entry)\
+        .join(Sentiment, Entry.id == Sentiment.entry_id)\
+        .filter(Entry.user_id == user_id)\
+        .order_by(Entry.created_at.asc())\
+        .limit(14)\
+        .all()
+    
+    if len(entries) < 3:
+        return {"prediction": "Insufficient data for clinical prediction. Keep journaling!", "status": "accumulating"}
+
+    history = []
+    for e in entries:
+        s = db.query(Sentiment).filter(Sentiment.entry_id == e.id).first()
+        history.append(f"Date: {e.created_at.date()}, Emotion: {s.primary_emotion}, Intensity: {s.intensity_score}")
+
+    history_str = "\n".join(history)
+    prompt = (
+        "You are a clinical predictive assistant. Based on the following user sentiment history:\n\n"
+        f"{history_str}\n\n"
+        "Predict the user's emotional trajectory for the next 3 days. "
+        "Provide a concise clinical rationale (e.g., 'Likely stabilization as the user implements new coping mechanisms mentioned in recent entries'). "
+        "Keep it under 60 words. Be empathetic but professional."
+    )
+
+    try:
+        response = model.generate_content(prompt)
+        return {"prediction": response.text.strip(), "status": "ready"}
+    except Exception as e:
+        print(f"Prediction failed: {e}")
+        return {"prediction": "Predictive engine warming up. Check back soon.", "status": "fallback"}
+
+@app.get("/clinical/deep-dive")
+async def clinical_deep_dive(topic: str):
+    """Performs an academic deep dive into a specific psychological topic."""
+    clinical_context = get_relevant_context(topic, n_results=5)
+    context_str = "\n".join([f"Source: {c['source']}\nContent: {c['content']}" for c in clinical_context])
+
+    prompt = (
+        "You are a clinical research synthesist. A user is asking for a deep dive into the following topic: "
+        f"'{topic}'.\n\n"
+        "Use the following academic research chunks to provide a detailed, structured, and informative analysis:\n"
+        f"{context_str}\n\n"
+        "Structure your response with:\n"
+        "1. Overview of the topic\n"
+        "2. Key Clinical Findings (cite sources)\n"
+        "3. Practical Applications (if applicable)\n"
+        "4. Limitations/Further Research\n\n"
+        "Maintain a high academic tone but remain accessible. Do not provide medical diagnoses."
+    )
+
+    try:
+        response = model.generate_content(prompt)
+        return {"analysis": response.text.strip(), "sources": [c['source'] for c in clinical_context]}
+    except Exception as e:
+        print(f"Deep dive failed: {e}")
+        raise HTTPException(status_code=500, detail="Synthesis engine busy. Try again shortly.")
 
 if __name__ == "__main__":
     import uvicorn

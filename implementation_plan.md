@@ -59,11 +59,17 @@ Py-Chiatrist/
 - [X] Expand Knowledge Base with multi-source academic papers.
 - [X] Implement AI-driven "Writing Prompts" based on week's emotional trend.
 
-### Phase 7: Clinical Hardening & Multi-Source Synthesis (Current)
-- [ ] Implement metadata-based filtering for RAG (source-specific insights).
-- [ ] Add "Deep Dive" mode for specific research topics.
-- [ ] Implement "Mood Prediction" based on historical patterns.
-- [ ] Add PDF export for clinical journaling summaries.
+### Phase 7: Clinical Hardening & Multi-Source Synthesis
+- [X] Implement metadata-based filtering for RAG (source-specific insights).
+- [X] Add "Deep Dive" mode for specific research topics.
+- [X] Implement "Mood Prediction" based on historical patterns.
+- [X] Add PDF export for clinical journaling summaries.
+
+### Phase 8: Final Polish & Ethics
+- [ ] Implement full WCAG 2.1 accessibility compliance.
+- [ ] Add dark mode support with clinical-safe color palettes.
+- [ ] Conduct final security audit on data persistence.
+- [ ] Prepare documentation for clinical researchers.
 
 ## 🛡 Safety Guardrails
 - **Crisis Detection**: Keywords like "hurt myself", "suicide", "emergency" trigger immediate bypass.

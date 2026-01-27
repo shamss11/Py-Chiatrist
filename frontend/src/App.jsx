@@ -4,6 +4,7 @@ import MoodDashboard from './components/MoodDashboard';
 import ClinicalBasis from './components/ClinicalBasis';
 import CrisisButton from './components/CrisisButton';
 import Typewriter from './components/Typewriter';
+import DeepDive from './components/DeepDive';
 import axios from 'axios';
 import {
     Sparkles,
@@ -14,6 +15,7 @@ import {
     GraduationCap,
     LayoutDashboard,
     User,
+    BookOpen,
     Settings,
     ShieldCheck,
     ChevronRight,
@@ -51,6 +53,7 @@ function App() {
         { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'journal', label: 'Journal', icon: PenLine },
         { id: 'trends', label: 'Emotional Trends', icon: LineChart },
+        { id: 'deep-dive', label: 'Research Deep Dive', icon: BookOpen },
         { id: 'clinical', label: 'Methodology', icon: GraduationCap },
     ];
 
@@ -228,6 +231,12 @@ function App() {
                             </p>
                         </section>
                         <MoodDashboard refreshTrigger={refreshTrigger} />
+                    </div>
+                )}
+
+                {activeTab === 'deep-dive' && (
+                    <div className="animate-slide-up">
+                        <DeepDive />
                     </div>
                 )}
 
