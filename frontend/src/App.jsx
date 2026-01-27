@@ -3,6 +3,7 @@ import JournalInterface from './components/JournalInterface';
 import MoodDashboard from './components/MoodDashboard';
 import ClinicalBasis from './components/ClinicalBasis';
 import CrisisButton from './components/CrisisButton';
+import Typewriter from './components/Typewriter';
 import {
     Sparkles,
     Info,
@@ -56,7 +57,7 @@ function App() {
                             <button
                                 key={item.id}
                                 onClick={() => setActiveTab(item.id)}
-                                className={`nav-link ${activeTab === item.id ? 'nav-link-active' : 'nav-link-inactive'}`}
+                                className={`nav - link ${activeTab === item.id ? 'nav-link-active' : 'nav-link-inactive'} `}
                             >
                                 <item.icon className="w-4.5 h-4.5" />
                                 {item.label}
@@ -177,11 +178,14 @@ function App() {
                                         </h3>
                                         <div className="px-3 py-1 bg-orange-100 text-orange-600 text-xs font-bold rounded-full uppercase">Verified Source</div>
                                     </div>
-                                    <div className="text-lg text-text-main leading-relaxed font-light space-y-6">
-                                        {lastResponse.response.split('\n').map((line, i) => (
-                                            <p key={i}>{line}</p>
-                                        ))}
+                                    <div className="text-xl text-text-main leading-relaxed font-light py-2">
+                                        <Typewriter
+                                            key={lastResponse.timestamp || lastResponse.response}
+                                            text={lastResponse.response}
+                                            speed={25}
+                                        />
                                     </div>
+
                                     <div className="pt-6 border-t border-orange-100 flex items-center gap-3 text-sm text-text-muted italic">
                                         <Info className="w-5 h-5 text-orange-400" />
                                         {lastResponse.disclaimer}
