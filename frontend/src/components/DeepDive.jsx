@@ -53,7 +53,7 @@ const DeepDive = () => {
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                             placeholder="Type a topic (e.g., 'CBT for anxiety', 'Neuroplasticity and depression')"
-                            className="w-full py-6 px-4 bg-transparent border-none focus:ring-0 text-xl font-light text-text-main placeholder:text-text-muted/40"
+                            className="w-full py-6 px-4 bg-transparent border-none focus:ring-0 outline-none text-xl font-light text-text-main placeholder:text-text-muted/40"
                         />
                     </div>
                     <button

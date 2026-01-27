@@ -41,7 +41,7 @@
 
     /* Professional Buttons - Refined with rounded-3xl for "Smooth" feel */
     .btn-pro-primary {
-        @apply inline-flex items-center justify-center gap-2 px-10 py-4 rounded-3xl font-bold transition-all duration-500 transform active:scale-95 cursor-pointer bg-[#FFB347] text-white;
+        @apply inline-flex items-center justify-center gap-2 px-10 py-4 rounded-3xl font-bold transition-all duration-500 transform active:scale-95 cursor-pointer bg-[#FFB347] text-white outline-none;
         box-shadow: 0 12px 30px rgba(255, 179, 71, 0.25);
     }
 
@@ -64,7 +64,7 @@
 
     /* Navigation Links */
     .nav-link {
-        @apply flex items-center gap-2.5 px-5 py-2.5 rounded-full font-medium transition-all duration-300 cursor-pointer text-text-muted relative;
+        @apply flex items-center gap-2.5 px-5 py-2.5 rounded-full font-medium transition-all duration-300 cursor-pointer text-text-muted relative outline-none;
     }
 
     .nav-link:hover {
