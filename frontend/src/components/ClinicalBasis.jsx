@@ -27,20 +27,20 @@ const ClinicalBasis = () => {
             </section>
 
             {/* Methodology Grid */}
-            <section className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                    { icon: Database, title: "Curated Knowledge", desc: "Our local sentinel system indexes thousands of peer-reviewed clinical papers from open-access academic repositories." },
-                    { icon: Search, title: "Precision Context", desc: "For every journal entry, our engine performs a vector search to find relevant methodologies like CBT or MBSR." },
-                    { icon: Globe, title: "Institutional RAG", desc: "Insights are cross-referenced with foundational frameworks developed at Harvard, Oxford, and Stanford." },
-                    { icon: ShieldCheck, title: "Safety Guardrails", desc: "We implement multi-stage keyword and sentiment filtering to ensure crisis triggers are handled with clinical priority." }
+                    { icon: Database, title: "Curated Knowledge", desc: "Indexing peer-reviewed clinical papers from open-access academic repositories." },
+                    { icon: Search, title: "Precision Context", desc: "Finding relevant CBT and MBSR methodologies for every journal entry." },
+                    { icon: Globe, title: "Institutional RAG", desc: "Insights cross-referenced with frameworks from Harvard, Oxford, and Stanford." },
+                    { icon: ShieldCheck, title: "Safety Guardrails", desc: "Multi-stage sentiment filtering to ensure crisis triggers are handled with priority." }
                 ].map((item, i) => (
-                    <div key={i} className="card-premium p-8 space-y-6 flex flex-col h-full transform hover:-translate-y-2 transition-transform">
-                        <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center border border-orange-100 shadow-inner">
+                    <div key={i} className="card-premium aspect-square p-8 flex flex-col items-start justify-between group hover:-translate-y-2 transition-all duration-500">
+                        <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center border border-orange-100 shadow-inner group-hover:scale-110 transition-transform duration-500">
                             <item.icon className="w-7 h-7 text-primary-dark" />
                         </div>
-                        <div className="space-y-3 flex-1">
-                            <h4 className="font-bold text-lg text-text-main uppercase tracking-tight">{item.title}</h4>
-                            <p className="text-sm text-text-muted leading-relaxed font-light">{item.desc}</p>
+                        <div className="space-y-3">
+                            <h4 className="font-bold text-lg text-text-main leading-tight">{item.title}</h4>
+                            <p className="text-xs text-text-muted leading-relaxed font-light line-clamp-3">{item.desc}</p>
                         </div>
                     </div>
                 ))}

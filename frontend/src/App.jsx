@@ -108,7 +108,7 @@ function App() {
                                         </button>
                                         <button
                                             onClick={() => setActiveTab('clinical')}
-                                            className="btn-pro bg-white/10 border border-white/20 hover:bg-white/20 text-white"
+                                            className="btn-pro-secondary"
                                         >
                                             View Methodology
                                         </button>

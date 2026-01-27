@@ -39,22 +39,23 @@
         transform: translateY(-2px);
     }
 
-    /* Professional Buttons - No chained @apply to avoid build errors */
+    /* Professional Buttons - Refined with rounded-3xl for "Smooth" feel */
     .btn-pro-primary {
-        @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform active:scale-95 cursor-pointer bg-[#FFB347] text-white;
-        box-shadow: 0 10px 25px rgba(255, 179, 71, 0.2);
+        @apply inline-flex items-center justify-center gap-2 px-10 py-4 rounded-3xl font-bold transition-all duration-500 transform active:scale-95 cursor-pointer bg-[#FFB347] text-white;
+        box-shadow: 0 12px 30px rgba(255, 179, 71, 0.25);
     }
 
     .btn-pro-primary:hover {
-        @apply bg-[#E67E22] -translate-y-0.5;
+        @apply bg-[#E67E22] -translate-y-1 shadow-orange-300/40;
     }
 
     .btn-pro-secondary {
-        @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform active:scale-95 cursor-pointer bg-white text-[#E67E22] border-2 border-orange-100;
+        @apply inline-flex items-center justify-center gap-2 px-10 py-4 rounded-3xl font-bold transition-all duration-500 transform active:scale-95 cursor-pointer bg-white/10 backdrop-blur-md border border-white/30 text-white;
     }
 
     .btn-pro-secondary:hover {
-        @apply border-orange-200 bg-orange-50;
+        @apply bg-white/20 border-white/50 -translate-y-1;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
     .gradient-text {
