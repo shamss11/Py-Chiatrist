@@ -1,7 +1,4 @@
 <div align="center">
-  <img src="./assets/brain_logo.png" width="180" alt="Py-Chiatrist Logo" />
-  
-  
   <p><b>AI-Powered Behavioral Health & Clinical Journaling</b></p>
 
   <p>
