@@ -15,22 +15,25 @@ function App() {
 
     return (
         <div className="min-h-screen pb-20">
-            <header className="pt-12 pb-8 text-center space-y-4">
-                <div className="flex justify-center mb-6">
-                    <div className="relative">
-                        <div className="absolute -inset-4 bg-orange-200/30 rounded-full blur-2xl animate-pulse"></div>
+            <header className="pt-20 pb-12 text-center space-y-6">
+                <div className="flex justify-center mb-8">
+                    <div className="relative group">
+                        <div className="absolute -inset-8 bg-white/20 rounded-full blur-3xl animate-pulse"></div>
                         <img
                             src="/logo.png"
                             alt="Py-Chiatrist Logo"
-                            className="w-24 h-24 relative animate-float drop-shadow-2xl"
+                            className="w-32 h-32 relative animate-float drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-[2rem]"
                         />
                     </div>
                 </div>
-                <h1 className="text-5xl font-semibold tracking-tight orange-gradient-text">
+                <div className="inline-block header-accent mb-4">
+                    Research-Backed Support
+                </div>
+                <h1 className="text-7xl font-bold tracking-tighter title-reveal">
                     Py-Chiatrist
                 </h1>
-                <p className="text-orange-400/80 font-light tracking-[0.2em] uppercase text-sm">
-                    AI-POWERED CLINICAL INSIGHT JOURNAL
+                <p className="text-white/70 font-medium tracking-[0.2em] uppercase text-sm max-w-md mx-auto leading-relaxed">
+                    AI-Powered Clinical Insight Journal
                 </p>
             </header>
 

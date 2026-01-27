@@ -5,65 +5,73 @@
 @tailwind utilities;
 
 :root {
-    --primary-orange: #FFB347;
-    --light-orange: #FFD59E;
-    --soft-cream: #FFF8F0;
-    --deep-amber: #E67E22;
-    --muted-brown: #5D4037;
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 179, 71, 0.3);
+    --primary-orange: #FF9E2A;
+    --light-orange: #FFD8A8;
+    --soft-cream: #FFF4E6;
+    --deep-amber: #D96A00;
+    --muted-brown: #4A332B;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(217, 106, 0, 0.4);
 }
 
 body {
     @apply antialiased text-muted-brown;
     font-family: 'Outfit', sans-serif;
-    background: linear-gradient(135deg, #FFF8F0 0%, #FFECD2 100%);
+    background: linear-gradient(135deg, #FFD8A8 0%, #FF9E2A 100%);
     min-height: 100vh;
 }
 
 .glass-morphism {
-    @apply bg-white/70 backdrop-blur-lg border border-orange-200/50 rounded-3xl shadow-xl shadow-orange-100/50;
+    @apply bg-white/85 backdrop-blur-xl border-2 border-orange-300/30 rounded-[2.5rem] shadow-2xl;
 }
 
 .orange-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-deep-amber to-primary-orange;
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80 drop-shadow-lg;
+}
+
+.title-reveal {
+    @apply text-white font-bold tracking-tight drop-shadow-md;
 }
 
 .btn-primary {
-    @apply bg-gradient-to-r from-deep-amber to-primary-orange text-white px-6 py-3 rounded-2xl hover:shadow-lg hover:shadow-orange-200 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+    @apply bg-[#D96A00] text-white px-8 py-4 rounded-3xl hover:shadow-2xl hover:bg-[#BF5D00] transition-all duration-500 transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-lg;
 }
 
 .input-glass {
-    @apply w-full bg-white/50 border-2 border-orange-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-primary-orange transition-all duration-300 placeholder-orange-300/70;
+    @apply w-full bg-white/70 border-2 border-orange-200/50 rounded-3xl px-8 py-6 focus:outline-none focus:border-primary-orange transition-all duration-300 placeholder-orange-400/50 text-muted-brown shadow-inner;
 }
 
-/* Custom Scrollbar for a premium feel */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-soft-cream;
+    @apply bg-orange-100;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-orange-200 rounded-full hover:bg-orange-300 transition-colors;
+    @apply bg-orange-400 rounded-full hover:bg-orange-500 transition-colors;
 }
 
 @keyframes float {
     0% {
-        transform: translateY(0px);
+        transform: translateY(0px) rotate(0deg);
     }
 
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-15px) rotate(2deg);
     }
 
     100% {
-        transform: translateY(0px);
+        transform: translateY(0px) rotate(0deg);
     }
 }
 
 .animate-float {
-    animation: float 4s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
+}
+
+.header-accent {
+    @apply bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border border-white/30 text-white text-xs font-bold tracking-[0.3em] uppercase;
 }
