@@ -3,10 +3,10 @@ import { BookOpen, GraduationCap, Database, Search, ShieldCheck, Globe, Star, In
 
 const ClinicalBasis = () => {
     const sources = [
-        { name: 'Harvard Medical School', focus: 'Behavioral Genetics & Mood Disorders', cite: 'HMS Dept of Psychiatry' },
-        { name: 'University of Oxford', focus: 'Cognitive Behavioral Research Unit', cite: 'CBT Research Oxford' },
-        { name: 'Johns Hopkins Medicine', focus: 'Affective Disorder Clinical Service', cite: 'JH Affective Neuro' },
-        { name: 'Stanford Medicine', focus: 'Precision Mental Health & Wellness', cite: 'Stanford Wellness' },
+        { name: 'Harvard Medical School', focus: 'Behavioral Genetics & Mood Disorders', cite: 'HMS Dept of Psychiatry', url: 'https://psychiatry.hms.harvard.edu/' },
+        { name: 'University of Oxford', focus: 'Cognitive Behavioral Research Unit', cite: 'CBT Research Oxford', url: 'https://www.psych.ox.ac.uk/' },
+        { name: 'Johns Hopkins Medicine', focus: 'Affective Disorder Clinical Service', cite: 'JH Affective Neuro', url: 'https://www.hopkinsmedicine.org/psychiatry' },
+        { name: 'Stanford Medicine', focus: 'Precision Mental Health & Wellness', cite: 'Stanford Wellness', url: 'https://psychiatry.stanford.edu/' },
     ];
 
     return (
@@ -68,16 +68,22 @@ const ClinicalBasis = () => {
 
                     <div className="lg:col-span-3 grid sm:grid-cols-2 gap-6">
                         {sources.map((source, i) => (
-                            <div key={i} className="p-6 rounded-3xl bg-white/5 border border-white/5 lg hover:bg-white/10 transition-colors group">
+                            <a
+                                key={i}
+                                href={source.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-6 rounded-3xl bg-white/5 border border-white/5 lg hover:bg-white/10 hover:border-white/20 transition-all group block"
+                            >
                                 <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-10 h-10 bg-[#FFB347] rounded-xl flex items-center justify-center text-black shadow-lg">
+                                    <div className="w-10 h-10 bg-[#FFB347] rounded-xl flex items-center justify-center text-black shadow-lg group-hover:scale-110 transition-transform">
                                         <BookOpen className="w-5 h-5" />
                                     </div>
                                     <h5 className="font-bold text-white group-hover:text-[#FFB347] transition-colors">{source.name}</h5>
                                 </div>
                                 <p className="text-xs text-white/40 font-light italic mb-2 tracking-wide uppercase">{source.cite}</p>
                                 <p className="text-sm text-white/70 leading-relaxed font-light">{source.focus}</p>
-                            </div>
+                            </a>
                         ))}
                     </div>
                 </div>
