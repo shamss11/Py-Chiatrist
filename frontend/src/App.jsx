@@ -4,6 +4,7 @@ import MoodDashboard from './components/MoodDashboard';
 import ClinicalBasis from './components/ClinicalBasis';
 import CrisisButton from './components/CrisisButton';
 import Typewriter from './components/Typewriter';
+import axios from 'axios';
 import {
     Sparkles,
     Info,
@@ -24,11 +25,26 @@ function App() {
     const [lastResponse, setLastResponse] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [activeTab, setActiveTab] = useState('home');
+    const [prompts, setPrompts] = useState([]);
+
+    const fetchPrompts = async () => {
+        try {
+            const res = await axios.get('http://127.0.0.1:8000/user/1/suggested-prompts');
+            setPrompts(res.data);
+        } catch (err) {
+            console.error("Failed to fetch prompts:", err);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchPrompts();
+    }, []);
 
     const handleNewResponse = (data) => {
         setLastResponse(data);
         setActiveTab('journal'); // Switch to journal to show response
         setRefreshTrigger(prev => prev + 1);
+        fetchPrompts(); // Refresh prompts after an entry is processed
     };
 
     const navItems = [
@@ -169,7 +185,11 @@ function App() {
                             </p>
                         </section>
 
-                        <JournalInterface onResponse={handleNewResponse} />
+                        <JournalInterface
+                            onResponse={handleNewResponse}
+                            prompts={prompts}
+                            refreshPrompts={fetchPrompts}
+                        />
 
                         {lastResponse && (
                             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">

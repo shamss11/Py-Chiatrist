@@ -2,25 +2,11 @@ import React, { useState } from 'react';
 import { Heart, ShieldAlert, Sparkles, Send, Info } from 'lucide-react';
 import axios from 'axios';
 
-const JournalInterface = ({ onResponse }) => {
+const JournalInterface = ({ onResponse, prompts, refreshPrompts }) => {
     const [entry, setEntry] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [prompts, setPrompts] = useState([]);
     const [selectedPrompt, setSelectedPrompt] = useState(null);
-
-    const fetchPrompts = async () => {
-        try {
-            const res = await axios.get('http://127.0.0.1:8000/user/1/suggested-prompts');
-            setPrompts(res.data);
-        } catch (err) {
-            console.error("Failed to fetch prompts:", err);
-        }
-    };
-
-    React.useEffect(() => {
-        fetchPrompts();
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,7 +27,7 @@ const JournalInterface = ({ onResponse }) => {
             onResponse(response.data);
             setEntry('');
             setSelectedPrompt(null);
-            fetchPrompts(); // Refresh prompts based on the new entry
+            refreshPrompts(); // Refresh prompts based on the new entry
         } catch (err) {
             const errorMsg = err.response
                 ? `Error ${err.response.status}: ${JSON.stringify(err.response.data)}`
