@@ -60,7 +60,7 @@ function App() {
                             <button
                                 key={item.id}
                                 onClick={() => setActiveTab(item.id)}
-                                className={`nav - link ${activeTab === item.id ? 'nav-link-active' : 'nav-link-inactive'} `}
+                                className={`nav-link ${activeTab === item.id ? 'nav-link-active' : ''}`}
                             >
                                 <item.icon className="w-4.5 h-4.5" />
                                 {item.label}

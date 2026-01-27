@@ -64,15 +64,20 @@
 
     /* Navigation Links */
     .nav-link {
-        @apply flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 cursor-pointer text-text-muted;
+        @apply flex items-center gap-2.5 px-5 py-2.5 rounded-full font-medium transition-all duration-300 cursor-pointer text-text-muted relative;
     }
 
     .nav-link:hover {
-        @apply text-text-main bg-orange-50/50;
+        @apply text-orange-600;
     }
 
     .nav-link-active {
-        @apply bg-orange-50 text-orange-700;
+        @apply text-orange-600 font-bold;
+    }
+
+    .nav-link-active::after {
+        content: '';
+        @apply absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-orange-500 mb-[-4px];
     }
 
     .textarea-pro {
