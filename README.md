@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./logo.png" width="200" alt="Py-Chiatrist Logo" />
   
-  <h1>🧠 PY-CHIATRIST</h1>
+  
   <p><b>AI-Powered Behavioral Health & Clinical Journaling</b></p>
 
   <p>
