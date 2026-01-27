@@ -1,45 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary-orange: #FF9E2A;
+    --color-light-orange: #FFD8A8;
+    --color-soft-cream: #FFF4E6;
+    --color-deep-amber: #D96A00;
+    --color-muted-brown: #4A332B;
+
+    --shadow-orange-glow: 0 20px 50px rgba(251, 146, 60, 0.2);
+}
+
+@layer base {
+    body {
+        @apply antialiased text-muted-brown;
+        font-family: 'Outfit', sans-serif;
+        /* Solid color matching the logo background for seamless integration */
+        background-color: #FFD8A8;
+        min-height: 100vh;
+    }
+}
+
+@layer components {
+    .glass-morphism {
+        @apply bg-white/85 backdrop-blur-xl border-2 border-orange-300/30 rounded-[2.5rem] shadow-2xl;
+    }
+
+    .btn-primary {
+        @apply bg-deep-amber text-white px-8 py-4 rounded-3xl hover:shadow-2xl hover:bg-amber-700 transition-all duration-500 transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-lg;
+    }
+
+    .input-glass {
+        @apply w-full bg-white/70 border-2 border-orange-200/50 rounded-3xl px-8 py-6 focus:outline-none focus:border-primary-orange transition-all duration-300 placeholder-orange-400/50 text-muted-brown shadow-inner;
+    }
+
+    .header-accent {
+        @apply bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border border-white/30 text-white text-xs font-bold tracking-[0.3em] uppercase;
+    }
+
+    .title-reveal {
+        @apply text-white font-bold tracking-tight drop-shadow-md;
+    }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-    --primary-orange: #FF9E2A;
-    --light-orange: #FFD8A8;
-    --soft-cream: #FFF4E6;
-    --deep-amber: #D96A00;
-    --muted-brown: #4A332B;
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(217, 106, 0, 0.4);
-}
-
-body {
-    @apply antialiased text-muted-brown;
-    font-family: 'Outfit', sans-serif;
-    background: linear-gradient(135deg, #FFD8A8 0%, #FF9E2A 100%);
-    min-height: 100vh;
-}
-
-.glass-morphism {
-    @apply bg-white/85 backdrop-blur-xl border-2 border-orange-300/30 rounded-[2.5rem] shadow-2xl;
-}
-
-.orange-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80 drop-shadow-lg;
-}
-
-.title-reveal {
-    @apply text-white font-bold tracking-tight drop-shadow-md;
-}
-
-.btn-primary {
-    @apply bg-[#D96A00] text-white px-8 py-4 rounded-3xl hover:shadow-2xl hover:bg-[#BF5D00] transition-all duration-500 transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-lg;
-}
-
-.input-glass {
-    @apply w-full bg-white/70 border-2 border-orange-200/50 rounded-3xl px-8 py-6 focus:outline-none focus:border-primary-orange transition-all duration-300 placeholder-orange-400/50 text-muted-brown shadow-inner;
-}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -47,11 +50,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-orange-100;
+    background: #FFD8A8;
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-orange-400 rounded-full hover:bg-orange-500 transition-colors;
+    background: #FF9E2A;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #D96A00;
 }
 
 @keyframes float {
@@ -70,8 +78,4 @@ body {
 
 .animate-float {
     animation: float 6s ease-in-out infinite;
-}
-
-.header-accent {
-    @apply bg-white/20 backdrop-blur-md px-6 py-2 rounded-full border border-white/30 text-white text-xs font-bold tracking-[0.3em] uppercase;
 }
