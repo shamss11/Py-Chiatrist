@@ -112,6 +112,7 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
                 "intensity": intensity,
                 "triggers": triggers
             },
+            "sources": [c['source'] for c in clinical_context],
             "disclaimer": DISCLAIMER
         }
 

@@ -198,11 +198,24 @@ function App() {
                             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">
                                 <div className="card-premium p-10 space-y-8 bg-gradient-to-br from-white to-orange-50/30">
                                     <div className="flex items-center justify-between border-b border-orange-100 pb-6">
-                                        <h3 className="text-2xl font-bold gradient-text flex items-center gap-3">
-                                            <Star className="w-6 h-6 fill-[#FFB347]" />
-                                            AI Clinical Perspective
-                                        </h3>
-                                        <div className="px-3 py-1 bg-orange-100 text-orange-600 text-xs font-bold rounded-full uppercase">Verified Source</div>
+                                        <div className="flex flex-col gap-4">
+                                            <h3 className="text-2xl font-bold gradient-text flex items-center gap-3">
+                                                <Star className="w-6 h-6 fill-[#FFB347]" />
+                                                AI Clinical Perspective
+                                            </h3>
+
+                                            {lastResponse.sources && lastResponse.sources.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 animate-slide-up">
+                                                    {[...new Set(lastResponse.sources)].map((source, i) => (
+                                                        <div key={i} className="px-3 py-1 rounded-full bg-orange-50 border border-orange-100 text-[10px] font-bold text-orange-600 uppercase tracking-tighter flex items-center gap-1.5 shadow-sm">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-orange-400"></div>
+                                                            {source.replace('.pdf', '').replace('.txt', '').replace(/_/g, ' ').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="px-3 py-1 bg-orange-100 text-orange-600 text-xs font-bold rounded-full uppercase">Verified Analysis</div>
                                     </div>
                                     <div className="text-xl text-text-main leading-relaxed font-light py-2">
                                         <Typewriter
@@ -212,7 +225,7 @@ function App() {
                                         />
                                     </div>
 
-                                    <div className="pt-6 border-t border-orange-100 flex items-center gap-3 text-sm text-text-muted italic">
+                                    <div className="pt-6 border-t border-orange-100 italic flex items-center gap-3 text-sm text-text-muted">
                                         <Info className="w-5 h-5 text-orange-400" />
                                         {lastResponse.disclaimer}
                                     </div>

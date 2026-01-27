@@ -107,7 +107,7 @@ const DeepDive = () => {
                                             <span className="text-[10px] font-bold text-orange-600">{i + 1}</span>
                                         </div>
                                         <p className="text-xs text-text-main font-semibold leading-tight group-hover:text-primary-dark transition-colors">
-                                            {source}
+                                            {source.replace('.pdf', '').replace('.txt', '').replace(/_/g, ' ').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                         </p>
                                     </div>
                                 ))}
