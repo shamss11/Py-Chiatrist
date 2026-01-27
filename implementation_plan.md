@@ -25,16 +25,16 @@ Py-Chiatrist/
 
 ## 📅 Roadmap
 
-### Phase 1: Knowledge Base Setup (Current)
-- [ ] Initialize Python environment.
-- [ ] Create `ingest_data.py` for chunking and embedding.
-- [ ] Set up ChromaDB and store clinical research chunks.
-- [ ] Implement `get_relevant_context` in `vector_service.py`.
+### Phase 1: Knowledge Base Setup
+- [X] Initialize Python environment.
+- [X] Create `ingest_data.py` for chunking and embedding.
+- [X] Set up ChromaDB and store clinical research chunks.
+- [X] Implement `get_relevant_context` in `vector_service.py`.
 
 ### Phase 2: RAG Pipeline & Therapist Logic
-- [ ] Set up FastAPI with `/journal/submit` endpoint.
-- [ ] Implement AI API integration (OpenAI).
-- [ ] Create the RAG prompt template using retrieved clinical context.
+- [X] Set up FastAPI with `/journal/submit` endpoint.
+- [X] Implement AI API integration (Gemini 2.0).
+- [X] Create the RAG prompt template using retrieved clinical context.
 
 ### Phase 3: Database & Mood Analytics
 - [X] Define SQLAlchemy models: `User`, `Entry`, `Sentiment`.
@@ -42,16 +42,28 @@ Py-Chiatrist/
 - [X] Write the 7-day average mood calculation function.
 
 ### Phase 4: Premium "Calm" UI
-- [ ] Bootstrap React app with Vite and Tailwind CSS.
-- [ ] Design a high-feel glassmorphism interface.
-- [ ] Implement `JournalInterface` with "Typing..." status.
-- [ ] Build `MoodDashboard` with Recharts for visual progress.
-- [ ] Add the floating Crisis Button.
+- [X] Bootstrap React app with Vite and Tailwind CSS.
+- [X] Design a high-feel glassmorphism interface.
+- [X] Implement `JournalInterface` with "Typing..." status.
+- [X] Build `MoodDashboard` with Recharts for visual progress.
+- [X] Add the floating Crisis Button.
 
 ### Phase 5: Safety & Ethics
-- [ ] Implement regex/keyword-based Safety Interceptor.
-- [ ] Ensure any high-risk detection bypasses AI for immediate resource links.
-- [ ] Add mandatory clinical disclaimer to UI footer.
+- [X] Implement regex/keyword-based Safety Interceptor.
+- [X] Ensure any high-risk detection bypasses AI for immediate resource links.
+- [X] Add mandatory clinical disclaimer to UI footer.
+
+### Phase 6: Advanced Analytics & Deep RAG
+- [X] Implement dynamic "Key Insights" based on database sentiment history.
+- [X] Create detailed "Trigger Analysis" visualization.
+- [X] Expand Knowledge Base with multi-source academic papers.
+- [X] Implement AI-driven "Writing Prompts" based on week's emotional trend.
+
+### Phase 7: Clinical Hardening & Multi-Source Synthesis (Current)
+- [ ] Implement metadata-based filtering for RAG (source-specific insights).
+- [ ] Add "Deep Dive" mode for specific research topics.
+- [ ] Implement "Mood Prediction" based on historical patterns.
+- [ ] Add PDF export for clinical journaling summaries.
 
 ## 🛡 Safety Guardrails
 - **Crisis Detection**: Keywords like "hurt myself", "suicide", "emergency" trigger immediate bypass.

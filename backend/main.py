@@ -61,7 +61,7 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
         f"[{context_str}]. "
         "Do not give physical medical advice. Be empathetic, non-judgmental, and supportive. "
         "\n\nCRITICAL: At the very end of your response, provide a JSON-formatted block for sentiment analysis like this: "
-        "SENTIMENT_DATA: {\"emotion\": \"string\", \"intensity\": float_1_to_10, \"triggers\": \"string\"}"
+        "SENTIMENT_DATA: {\"emotion\": \"string\", \"intensity\": float_1_to_10, \"triggers\": \"1-2 words only, comma separated\"}"
     )
 
     try:
@@ -125,19 +125,28 @@ async def get_mood_trend(user_id: int, db: Session = Depends(get_db)):
     from datetime import datetime, timedelta
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     
-    trend = db.query(Entry.created_at, Sentiment.intensity_score, Sentiment.primary_emotion)\
-        .join(Sentiment, Entry.id == Sentiment.entry_id)\
-        .filter(Entry.user_id == user_id)\
-        .filter(Entry.created_at >= seven_days_ago)\
-        .order_by(Entry.created_at.asc())\
-        .all()
+    from sqlalchemy import func
+    
+    # Group by date to avoid label clutter
+    # Use SQLite date function
+    trend = db.query(
+        func.date(Entry.created_at).label('date'),
+        func.avg(Sentiment.intensity_score).label('avg_score'),
+        func.max(Sentiment.primary_emotion).label('top_emotion') # Just take one emotion for the day
+    )\
+    .join(Sentiment, Entry.id == Sentiment.entry_id)\
+    .filter(Entry.user_id == user_id)\
+    .filter(Entry.created_at >= seven_days_ago)\
+    .group_by(func.date(Entry.created_at))\
+    .order_by('date')\
+    .all()
     
     return [
         {
-            "day": t[0].strftime("%a"), 
-            "score": t[1], 
+            "day": datetime.strptime(t[0], "%Y-%m-%d").strftime("%a"), 
+            "score": round(t[1], 1), 
             "emotion": t[2],
-            "full_date": t[0].isoformat()
+            "full_date": t[0]
         } for t in trend
     ]
 
@@ -145,6 +154,122 @@ async def get_mood_trend(user_id: int, db: Session = Depends(get_db)):
 async def get_mood_stats(user_id: int, db: Session = Depends(get_db)):
     avg_mood = calculate_average_mood(db, user_id)
     return {"average_mood_7d": avg_mood}
+
+@app.get("/user/{user_id}/insights")
+async def get_advanced_insights(user_id: int, db: Session = Depends(get_db)):
+    """Returns dynamic behavioral insights based on history."""
+    from datetime import datetime, timedelta
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    
+    entries = db.query(Sentiment, Entry)\
+        .join(Entry, Sentiment.entry_id == Entry.id)\
+        .filter(Entry.user_id == user_id)\
+        .filter(Entry.created_at >= seven_days_ago)\
+        .all()
+    
+    if not entries:
+        return {
+            "top_emotion": "Neutral",
+            "stability": "Pending",
+            "trigger_summary": "Not enough data yet.",
+            "insight_message": "Document your first few days to see behavioral patterns."
+        }
+
+    # Calculate Top Emotion
+    emotions = [e[0].primary_emotion for e in entries]
+    top_emotion = max(set(emotions), key=emotions.count)
+    
+    # Calculate Stability
+    intensities = [e[0].intensity_score for e in entries]
+    avg_intensity = sum(intensities) / len(intensities)
+    variance = sum((x - avg_intensity) ** 2 for x in intensities) / len(intensities)
+    
+    stability = "High" if variance < 1 else "Moderate" if variance < 4 else "Low"
+    
+    # Trigger Summary (just combining recent triggers)
+    all_triggers = []
+    for e in entries:
+        if e[0].triggers and e[0].triggers != "Unknown":
+            # Clean and truncate
+            ts = [t.strip().title() for t in e[0].triggers.split(",")]
+            all_triggers.extend(ts)
+    
+    unique_triggers = list(set(all_triggers))
+    trigger_summary = ", ".join([t[:15] + ".." if len(t) > 17 else t for t in unique_triggers[:3]]) if unique_triggers else "None identified"
+
+    return {
+        "top_emotion": top_emotion,
+        "stability": stability,
+        "trigger_summary": trigger_summary,
+        "insight_message": f"Your emotional landscape is currently dominated by {top_emotion.lower()} states with {stability.lower()} stability."
+    }
+
+@app.get("/user/{user_id}/trigger-distribution")
+async def get_trigger_distribution(user_id: int, db: Session = Depends(get_db)):
+    """Returns frequency of different emotional triggers."""
+    from datetime import datetime, timedelta
+    from collections import Counter
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    
+    sentiments = db.query(Sentiment)\
+        .join(Entry, Sentiment.entry_id == Entry.id)\
+        .filter(Entry.user_id == user_id)\
+        .filter(Entry.created_at >= seven_days_ago)\
+        .all()
+    
+    triggers = []
+    for s in sentiments:
+        if s.triggers and s.triggers != "Unknown":
+            # Split by comma in case of multiple triggers
+            ts = [t.strip().title() for t in s.triggers.split(",")]
+            triggers.extend(ts)
+            
+    counts = Counter(triggers)
+    # Only return top 10 triggers to avoid clutter
+    return [{"name": name, "value": count} for name, count in counts.most_common(10)]
+
+@app.get("/user/{user_id}/suggested-prompts")
+async def get_suggested_prompts(user_id: int, db: Session = Depends(get_db)):
+    """Generates personalized reflection prompts based on recent mood."""
+    from datetime import datetime, timedelta
+    seven_days_ago = datetime.utcnow() - timedelta(days=7)
+    
+    sentiments = db.query(Sentiment)\
+        .join(Entry, Sentiment.entry_id == Entry.id)\
+        .filter(Entry.user_id == user_id)\
+        .filter(Entry.created_at >= seven_days_ago)\
+        .all()
+    
+    if not sentiments:
+        return ["What are three things you're grateful for today?", "Describe a moment today when you felt at peace."]
+
+    emotions = [s.primary_emotion.lower() for s in sentiments]
+    top_emotion = max(set(emotions), key=emotions.count)
+    
+    prompts = {
+        "anxiety": [
+            "What is one thing within your control that you can focus on today?",
+            "Describe the physical sensations of your anxiety and imagine them as passing clouds.",
+            "Write about a time you overcame a similar worry."
+        ],
+        "sadness": [
+            "What is a small activity that has brought you comfort in the past?",
+            "If you could say one kind thing to yourself right now, what would it be?",
+            "Write about a person or memory that makes you feel safe."
+        ],
+        "anger": [
+            "What boundary of yours felt crossed today?",
+            "How can you channel this energy into a productive task?",
+            "Write a letter (that you won't send) to the person or situation causing this heat."
+        ],
+        "happiness": [
+            "What specific moment today sparked joy for you?",
+            "How can you replicate this feeling later in the week?",
+            "Who can you share this positive energy with today?"
+        ]
+    }
+    
+    return prompts.get(top_emotion, ["What is the main theme of your thoughts today?", "How do you want to feel by the end of tomorrow?"])
 
 if __name__ == "__main__":
     import uvicorn

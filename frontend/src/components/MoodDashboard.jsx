@@ -1,24 +1,100 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell } from 'recharts';
 import { TrendingUp, Smile, Calendar, Target, Activity } from 'lucide-react';
 import axios from 'axios';
 
+const TriggerChart = ({ refreshTrigger }) => {
+    const [data, setData] = useState([]);
+    const COLORS = ['#FFB347', '#E67E22', '#D35400', '#F39C12', '#F1C40F'];
+
+    useEffect(() => {
+        const fetchTriggers = async () => {
+            try {
+                const res = await axios.get('http://127.0.0.1:8000/user/1/trigger-distribution');
+                setData(res.data);
+            } catch (err) {
+                console.error("Failed to fetch triggers:", err);
+            }
+        };
+        fetchTriggers();
+    }, [refreshTrigger]);
+
+    if (!data.length) return null;
+
+    return (
+        <div className="card-premium p-10 space-y-8 animate-slide-up">
+            <h3 className="text-2xl font-bold text-text-main flex items-center gap-3">
+                <Target className="w-6 h-6 text-primary-dark" />
+                Root Trigger Analysis
+            </h3>
+            <div className="h-[400px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                        data={data}
+                        layout="vertical"
+                        margin={{ left: 20, right: 40, top: 20, bottom: 20 }}
+                    >
+                        <XAxis type="number" hide />
+                        <YAxis
+                            dataKey="name"
+                            type="category"
+                            width={180}
+                            axisLine={false}
+                            tickLine={false}
+                            tick={(props) => {
+                                const { x, y, payload } = props;
+                                const label = payload.value.length > 25 ? payload.value.substring(0, 22) + '...' : payload.value;
+                                return (
+                                    <text x={x} y={y} dy={4} textAnchor="end" fill="#7A6A5E" fontSize={12} fontWeight={600}>
+                                        {label}
+                                    </text>
+                                );
+                            }}
+                        />
+                        <Tooltip
+                            cursor={{ fill: 'rgba(255, 179, 71, 0.05)' }}
+                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                        />
+                        <Bar
+                            dataKey="value"
+                            radius={[0, 8, 8, 0]}
+                            barSize={24}
+                        >
+                            {data.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+            <p className="text-sm text-text-muted font-light italic text-center">
+                Detected recurring environmental and internal factors influencing your emotional state.
+            </p>
+        </div>
+    );
+};
+
 const MoodDashboard = ({ refreshTrigger }) => {
     const [data, setData] = useState([]);
+    const [insights, setInsights] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchTrend = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/user/1/mood-trend');
-                setData(response.data);
+                const [trendRes, insightRes] = await Promise.all([
+                    axios.get('http://127.0.0.1:8000/user/1/mood-trend'),
+                    axios.get('http://127.0.0.1:8000/user/1/insights')
+                ]);
+                setData(trendRes.data);
+                setInsights(insightRes.data);
             } catch (err) {
-                console.error("Failed to fetch mood trend:", err);
+                console.error("Failed to fetch dashboard data:", err);
             } finally {
                 setIsLoading(false);
             }
         };
-        fetchTrend();
+        fetchData();
     }, [refreshTrigger]);
 
     if (isLoading) return (
@@ -105,9 +181,7 @@ const MoodDashboard = ({ refreshTrigger }) => {
                         <Activity className="w-10 h-10 mb-6 text-white/50" />
                         <h4 className="text-lg font-bold mb-2">Weekly Summary</h4>
                         <p className="text-white/80 text-sm font-light leading-relaxed">
-                            {data.length > 0
-                                ? "Your emotional levels are trending toward stability. Keep documenting to refine your insights."
-                                : "Awaiting your first entries to generate professional summary reports."}
+                            {insights?.insight_message || "Awaiting your first entries to generate professional summary reports."}
                         </p>
                     </div>
 
@@ -118,9 +192,9 @@ const MoodDashboard = ({ refreshTrigger }) => {
                         </div>
                         <ul className="space-y-4">
                             {[
-                                { label: 'Active Awareness', value: 'High' },
-                                { label: 'Consistency', value: data.length > 3 ? 'Strong' : 'Developing' },
-                                { label: 'Contextual RAG', value: 'Active' }
+                                { label: 'Top Emotion', value: insights?.top_emotion || 'N/A' },
+                                { label: 'Stability', value: insights?.stability || 'N/A' },
+                                { label: 'Top Triggers', value: insights?.trigger_summary || 'None' }
                             ].map((item, i) => (
                                 <li key={i} className="flex justify-between items-center text-sm">
                                     <span className="text-text-muted">{item.label}</span>
@@ -131,6 +205,9 @@ const MoodDashboard = ({ refreshTrigger }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Trigger Chart Section */}
+            <TriggerChart refreshTrigger={refreshTrigger} />
 
             <div className="text-center">
                 <p className="text-xs text-text-muted/60 uppercase tracking-[0.3em] font-medium">

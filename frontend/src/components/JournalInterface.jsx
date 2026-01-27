@@ -6,6 +6,19 @@ const JournalInterface = ({ onResponse }) => {
     const [entry, setEntry] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [prompts, setPrompts] = useState([]);
+
+    React.useEffect(() => {
+        const fetchPrompts = async () => {
+            try {
+                const res = await axios.get('http://127.0.0.1:8000/user/1/suggested-prompts');
+                setPrompts(res.data);
+            } catch (err) {
+                console.error("Failed to fetch prompts:", err);
+            }
+        };
+        fetchPrompts();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,7 +71,25 @@ const JournalInterface = ({ onResponse }) => {
                             </div>
                         </div>
 
-                        <div className="p-5 rounded-2xl bg-orange-100/50 border border-orange-200">
+                        <div className="space-y-4 pt-4">
+                            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#E67E22] mb-3">Suggested Focus</h4>
+                            <div className="space-y-3">
+                                {prompts.map((prompt, i) => (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        onClick={() => setEntry(prompt)}
+                                        className="w-full text-left p-4 rounded-xl bg-white border border-orange-100 hover:border-orange-300 hover:shadow-md transition-all group"
+                                    >
+                                        <p className="text-sm text-text-main group-hover:text-primary-dark transition-colors font-light leading-relaxed">
+                                            {prompt}
+                                        </p>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-orange-100/50 border border-orange-200 mt-8">
                             <p className="text-xs text-orange-800/70 leading-relaxed italic">
                                 "The act of naming emotions reduces the activity of the amygdala, the brain's alarm system." — Clinical Research Insight
                             </p>
