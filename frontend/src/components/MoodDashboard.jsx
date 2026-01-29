@@ -82,14 +82,14 @@ const JournalHistory = ({ refreshTrigger }) => {
 };
 
 const MoodPrediction = ({ refreshTrigger }) => {
-    const [prediction, setPrediction] = useState(null);
+    const [data, setData] = useState(null);
     const [status, setStatus] = useState('loading');
 
     useEffect(() => {
         const fetchPrediction = async () => {
             try {
                 const res = await axios.get('http://127.0.0.1:8000/user/1/mood-prediction');
-                setPrediction(res.data.prediction);
+                setData(res.data);
                 setStatus(res.data.status);
             } catch (err) {
                 console.error("Failed to fetch prediction:", err);
@@ -101,36 +101,63 @@ const MoodPrediction = ({ refreshTrigger }) => {
     if (status === 'accumulating') return null;
 
     return (
-        <div className="card-premium p-10 bg-gradient-to-br from-[#2D241E] to-[#453830] text-white space-y-6">
-            <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold flex items-center gap-3 text-orange-400">
-                    <TrendingUp className="w-5 h-5" />
-                    Emotional Trajectory Forecast
-                </h3>
-                <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-200">
-                    AI Predictive Engine
+        <div className="space-y-6">
+            <div className="card-premium p-10 bg-gradient-to-br from-[#2D241E] to-[#453830] text-white space-y-6">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold flex items-center gap-3 text-orange-400">
+                        <TrendingUp className="w-5 h-5" />
+                        Emotional Trajectory Forecast
+                    </h3>
+                    <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-200">
+                        AI Predictive Engine
+                    </div>
+                </div>
+
+                {status === 'loading' ? (
+                    <div className="animate-pulse space-y-3">
+                        <div className="h-4 bg-white/10 rounded w-3/4"></div>
+                        <div className="h-4 bg-white/10 rounded w-1/2"></div>
+                    </div>
+                ) : (
+                    <p className="text-lg font-light leading-relaxed italic opacity-90 border-l-2 border-orange-500/30 pl-6">
+                        "{data?.prediction}"
+                    </p>
+                )}
+
+                <div className="pt-4 border-t border-white/10 flex items-center gap-4 text-[10px] uppercase tracking-widest text-orange-200/50 font-bold">
+                    <div className="flex items-center gap-2">
+                        <Activity className="w-4 h-4" />
+                        Clinical Pattern Synthesis Active
+                    </div>
+                    <div className="h-1 w-1 bg-orange-500/50 rounded-full"></div>
+                    <span>Next 72 Hours</span>
                 </div>
             </div>
 
-            {status === 'loading' ? (
-                <div className="animate-pulse space-y-3">
-                    <div className="h-4 bg-white/10 rounded w-3/4"></div>
-                    <div className="h-4 bg-white/10 rounded w-1/2"></div>
+            {data?.advice && data.advice.length > 0 && (
+                <div className="card-premium p-10 bg-white border-orange-100/50 space-y-8 animate-slide-up">
+                    <div className="flex items-center gap-3 border-b border-orange-50 pb-6">
+                        <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+                            <Star className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-text-main">Clinical Recommendations</h4>
+                            <p className="text-[10px] text-text-muted uppercase tracking-widest">Targeted Behavioral Interventions</p>
+                        </div>
+                    </div>
+
+                    <ul className="space-y-4">
+                        {data.advice.map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-4 group">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 group-hover:scale-150 transition-transform"></div>
+                                <p className="text-sm text-text-main font-light leading-relaxed">
+                                    {item}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-            ) : (
-                <p className="text-lg font-light leading-relaxed italic opacity-90 border-l-2 border-orange-500/30 pl-6">
-                    "{prediction}"
-                </p>
             )}
-
-            <div className="pt-4 border-t border-white/10 flex items-center gap-4 text-[10px] uppercase tracking-widest text-orange-200/50 font-bold">
-                <div className="flex items-center gap-2">
-                    <Activity className="w-4 h-4" />
-                    Clinical Pattern Synthesis Active
-                </div>
-                <div className="h-1 w-1 bg-orange-500/50 rounded-full"></div>
-                <span>Next 72 Hours</span>
-            </div>
         </div>
     );
 };

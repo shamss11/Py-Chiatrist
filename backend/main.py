@@ -321,17 +321,26 @@ async def get_mood_prediction(user_id: int, db: Session = Depends(get_db)):
     prompt = (
         "You are a clinical predictive assistant. Based on the following user sentiment history:\n\n"
         f"{history_str}\n\n"
-        "Predict the user's emotional trajectory for the next 3 days. "
-        "Provide a concise clinical rationale (e.g., 'Likely stabilization as the user implements new coping mechanisms mentioned in recent entries'). "
-        "Keep it under 60 words. Be empathetic but professional."
+        "1. Predict the user's emotional trajectory for the next 3 days with a concise clinical rationale (max 60 words).\n"
+        "2. Provide 3 specific, actionable clinical advice bullet points for the user to maintain or improve their wellbeing based on their patterns.\n\n"
+        "Format your response EXACTLY as a JSON object with this structure:\n"
+        '{"prediction": "...", "advice": ["...", "...", "..."]}'
     )
 
     try:
         response = model.generate_content(prompt)
-        return {"prediction": response.text.strip(), "status": "ready"}
+        import json
+        # Clean up possible markdown code blocks from response
+        text = response.text.strip().replace('```json', '').replace('```', '')
+        data = json.loads(text)
+        return {"prediction": data.get("prediction"), "advice": data.get("advice", []), "status": "ready"}
     except Exception as e:
         print(f"Prediction failed: {e}")
-        return {"prediction": "Predictive engine warming up. Check back soon.", "status": "fallback"}
+        return {
+            "prediction": "Predictive engine warming up. Check back soon.", 
+            "advice": ["Maintain consistent journaling", "Monitor sleep patterns", "Engage in light physical activity"],
+            "status": "fallback"
+        }
 
 @app.get("/clinical/deep-dive")
 async def clinical_deep_dive(topic: str):
