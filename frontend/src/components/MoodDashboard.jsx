@@ -163,15 +163,36 @@ const MoodDashboard = ({ refreshTrigger }) => {
         </div>
     );
 
+    const [isExporting, setIsExporting] = useState(false);
+
+    const handleExport = async () => {
+        setIsExporting(true);
+        try {
+            await exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     return (
         <div id="mood-dashboard-report" className="w-full max-w-6xl mx-auto space-y-8 animate-slide-up bg-[#FFFBF5] p-4">
             <div className="flex justify-end pr-4">
                 <button
-                    onClick={() => exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`)}
-                    className="flex items-center gap-2 px-6 py-3 bg-white border border-orange-100 rounded-2xl text-primary-dark font-bold text-xs tracking-widest uppercase hover:bg-orange-50 transition-all shadow-sm"
+                    onClick={handleExport}
+                    disabled={isExporting}
+                    className="flex items-center gap-2 px-6 py-3 bg-white border border-orange-100 rounded-2xl text-primary-dark font-bold text-xs tracking-widest uppercase hover:bg-orange-50 transition-all shadow-sm disabled:opacity-50"
                 >
-                    <Download className="w-4 h-4" />
-                    Download Clinical Report
+                    {isExporting ? (
+                        <>
+                            <div className="w-4 h-4 border-2 border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
+                            Generating...
+                        </>
+                    ) : (
+                        <>
+                            <Download className="w-4 h-4" />
+                            Download Clinical Report
+                        </>
+                    )}
                 </button>
             </div>
 
