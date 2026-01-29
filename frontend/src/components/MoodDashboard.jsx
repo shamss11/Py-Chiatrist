@@ -139,6 +139,16 @@ const MoodDashboard = ({ refreshTrigger }) => {
     const [data, setData] = useState([]);
     const [insights, setInsights] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isExporting, setIsExporting] = useState(false);
+
+    const handleExport = async () => {
+        setIsExporting(true);
+        try {
+            await exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`);
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -166,17 +176,6 @@ const MoodDashboard = ({ refreshTrigger }) => {
             <span className="text-text-muted font-light tracking-widest text-sm uppercase">Rebuilding timeline...</span>
         </div>
     );
-
-    const [isExporting, setIsExporting] = useState(false);
-
-    const handleExport = async () => {
-        setIsExporting(true);
-        try {
-            await exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`);
-        } finally {
-            setIsExporting(false);
-        }
-    };
 
     return (
         <div id="mood-dashboard-report" className="w-full max-w-6xl mx-auto space-y-8 animate-slide-up bg-[#FFFBF5] p-4">
