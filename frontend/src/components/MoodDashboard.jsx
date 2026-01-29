@@ -124,6 +124,25 @@ const MoodPrediction = ({ refreshTrigger }) => {
                     </p>
                 )}
 
+                {data?.advice && data.advice.length > 0 && (
+                    <div className="pt-6 border-t border-white/5 space-y-4">
+                        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-orange-400">
+                            <Star className="w-3.5 h-3.5" />
+                            Targeted Clinical Guidance
+                        </div>
+                        <ul className="grid gap-3">
+                            {data.advice.map((item, idx) => (
+                                <li key={idx} className="flex items-start gap-3 group">
+                                    <div className="mt-1.5 w-1 h-1 rounded-full bg-orange-500 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.5)]"></div>
+                                    <p className="text-sm font-light leading-relaxed opacity-80">
+                                        {item}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
                 <div className="pt-4 border-t border-white/10 flex items-center gap-4 text-[10px] uppercase tracking-widest text-orange-200/50 font-bold">
                     <div className="flex items-center gap-2">
                         <Activity className="w-4 h-4" />
@@ -133,31 +152,6 @@ const MoodPrediction = ({ refreshTrigger }) => {
                     <span>Next 72 Hours</span>
                 </div>
             </div>
-
-            {data?.advice && data.advice.length > 0 && (
-                <div className="card-premium p-10 bg-white border-orange-100/50 space-y-8 animate-slide-up">
-                    <div className="flex items-center gap-3 border-b border-orange-50 pb-6">
-                        <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-                            <Star className="w-5 h-5 text-orange-600" />
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-text-main">Clinical Recommendations</h4>
-                            <p className="text-[10px] text-text-muted uppercase tracking-widest">Targeted Behavioral Interventions</p>
-                        </div>
-                    </div>
-
-                    <ul className="space-y-4">
-                        {data.advice.map((item, idx) => (
-                            <li key={idx} className="flex items-start gap-4 group">
-                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 group-hover:scale-150 transition-transform"></div>
-                                <p className="text-sm text-text-main font-light leading-relaxed">
-                                    {item}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </div>
     );
 };
