@@ -50,7 +50,6 @@ function App() {
     };
 
     const navItems = [
-        { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'journal', label: 'Journal', icon: PenLine },
         { id: 'trends', label: 'Emotional Trends', icon: LineChart },
         { id: 'deep-dive', label: 'Research Deep Dive', icon: BookOpen },
