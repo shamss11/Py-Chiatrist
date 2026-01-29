@@ -144,7 +144,13 @@ const MoodDashboard = ({ refreshTrigger }) => {
     const handleExport = async () => {
         setIsExporting(true);
         try {
-            await exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`);
+            const success = await exportToPDF('mood-dashboard-report', `clinical-report-${new Date().toISOString().split('T')[0]}.pdf`);
+            if (!success) {
+                alert("PDF generation failed. Please try again or check your browser console.");
+            }
+        } catch (err) {
+            console.error("Export Error:", err);
+            alert("An unexpected error occurred during export.");
         } finally {
             setIsExporting(false);
         }
