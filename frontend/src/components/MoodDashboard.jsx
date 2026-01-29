@@ -12,7 +12,9 @@ const JournalHistory = ({ refreshTrigger }) => {
         const fetchHistory = async () => {
             try {
                 const res = await axios.get('http://127.0.0.1:8000/user/1/history');
-                setHistory(res.data);
+                if (Array.isArray(res.data)) {
+                    setHistory(res.data);
+                }
             } catch (err) {
                 console.error("Failed to fetch history:", err);
             } finally {
@@ -23,7 +25,7 @@ const JournalHistory = ({ refreshTrigger }) => {
     }, [refreshTrigger]);
 
     if (isLoading) return null;
-    if (!history.length) return null;
+    if (!history || !history.length) return null;
 
     return (
         <div className="card-premium p-10 space-y-8 animate-slide-up bg-white">
@@ -38,30 +40,30 @@ const JournalHistory = ({ refreshTrigger }) => {
             </div>
 
             <div className="grid gap-6">
-                {history.slice(0, 5).map((entry, i) => (
-                    <div key={entry.id} className="p-6 rounded-[1.5rem] bg-[#FFFBF5] border border-orange-100/50 hover:border-orange-200 transition-all group">
+                {(Array.isArray(history) ? history : []).slice(0, 5).map((entry, i) => (
+                    <div key={entry.id || i} className="p-6 rounded-[1.5rem] bg-[#FFFBF5] border border-orange-100/50 hover:border-orange-200 transition-all group">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-sm">
-                                    {entry.sentiment.emotion === 'Joy' ? '☀️' : entry.sentiment.emotion === 'Anxiety' ? '🌊' : '☁️'}
+                                    {(entry.sentiment?.emotion === 'Joy') ? '☀️' : (entry.sentiment?.emotion === 'Anxiety') ? '🌊' : '☁️'}
                                 </div>
                                 <div>
                                     <p className="text-xs font-bold text-text-main">
-                                        {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        {entry.created_at ? new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}
                                     </p>
-                                    <p className="text-[10px] text-text-muted uppercase tracking-wider">{entry.sentiment.emotion}</p>
+                                    <p className="text-[10px] text-text-muted uppercase tracking-wider">{entry.sentiment?.emotion || 'Unknown'}</p>
                                 </div>
                             </div>
                             <div className="px-2 py-1 bg-white rounded-lg border border-orange-50 text-[10px] font-bold text-orange-600">
-                                Intensity: {entry.sentiment.intensity}
+                                Intensity: {entry.sentiment?.intensity || 0}
                             </div>
                         </div>
                         <p className="text-sm text-text-main font-light leading-relaxed line-clamp-2 italic opacity-80">
                             "{entry.content}"
                         </p>
-                        {entry.sentiment.triggers && (
+                        {entry.sentiment?.triggers && typeof entry.sentiment.triggers === 'string' && (
                             <div className="mt-4 flex flex-wrap gap-2">
-                                {entry.sentiment.triggers.split(',').map((tag, j) => (
+                                {entry.sentiment.triggers.split(',').filter(t => t.trim()).map((tag, j) => (
                                     <span key={j} className="text-[9px] font-bold uppercase tracking-tighter px-2 py-0.5 bg-orange-100/50 text-orange-700 rounded-md">
                                         {tag.trim()}
                                     </span>
@@ -145,7 +147,9 @@ const MoodDashboard = ({ refreshTrigger }) => {
                     axios.get('http://127.0.0.1:8000/user/1/mood-trend'),
                     axios.get('http://127.0.0.1:8000/user/1/insights')
                 ]);
-                setData(trendRes.data);
+                if (Array.isArray(trendRes.data)) {
+                    setData(trendRes.data);
+                }
                 setInsights(insightRes.data);
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
