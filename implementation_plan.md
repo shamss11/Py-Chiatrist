@@ -63,6 +63,7 @@ Py-Chiatrist/
 - [X] Implement metadata-based filtering for RAG (source-specific insights).
 - [X] Add "Deep Dive" mode for specific research topics.
 - [X] Implement "Mood Prediction" based on historical patterns.
+- [X] Implement "Clinical Notebook" for historical journal review.
 - [X] Add PDF export for clinical journaling summaries.
 
 ### Phase 8: Final Polish & Ethics

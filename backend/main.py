@@ -151,6 +151,29 @@ async def get_mood_trend(user_id: int, db: Session = Depends(get_db)):
         } for t in trend
     ]
 
+@app.get("/user/{user_id}/history")
+async def get_journal_history(user_id: int, db: Session = Depends(get_db)):
+    """Returns all journal entries with their sentiment data."""
+    entries = db.query(Entry)\
+        .outerjoin(Sentiment, Entry.id == Sentiment.entry_id)\
+        .filter(Entry.user_id == user_id)\
+        .order_by(Entry.created_at.desc())\
+        .all()
+    
+    return [
+        {
+            "id": e.id,
+            "content": e.content,
+            "ai_response": e.ai_response,
+            "created_at": e.created_at.isoformat(),
+            "sentiment": {
+                "emotion": e.sentiment.primary_emotion if e.sentiment else "Unknown",
+                "intensity": e.sentiment.intensity_score if e.sentiment else 0,
+                "triggers": e.sentiment.triggers if e.sentiment else ""
+            }
+        } for e in entries
+    ]
+
 @app.get("/user/{user_id}/mood-stats")
 async def get_mood_stats(user_id: int, db: Session = Depends(get_db)):
     avg_mood = calculate_average_mood(db, user_id)

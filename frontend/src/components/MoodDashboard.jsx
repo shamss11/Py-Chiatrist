@@ -1,75 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, BarChart, Bar, Cell } from 'recharts';
-import { TrendingUp, Smile, Calendar, Target, Activity, Download } from 'lucide-react';
+import { TrendingUp, Smile, Calendar, Target, Activity, Download, Book, FileText } from 'lucide-react';
 import axios from 'axios';
 import { exportToPDF } from '../utils/pdfExport';
 
-const TriggerChart = ({ refreshTrigger }) => {
-    const [data, setData] = useState([]);
-    const COLORS = ['#FFB347', '#E67E22', '#D35400', '#F39C12', '#F1C40F'];
+const JournalHistory = ({ refreshTrigger }) => {
+    const [history, setHistory] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchTriggers = async () => {
+        const fetchHistory = async () => {
             try {
-                const res = await axios.get('http://127.0.0.1:8000/user/1/trigger-distribution');
-                setData(res.data);
+                const res = await axios.get('http://127.0.0.1:8000/user/1/history');
+                setHistory(res.data);
             } catch (err) {
-                console.error("Failed to fetch triggers:", err);
+                console.error("Failed to fetch history:", err);
+            } finally {
+                setIsLoading(false);
             }
         };
-        fetchTriggers();
+        fetchHistory();
     }, [refreshTrigger]);
 
-    if (!data.length) return null;
+    if (isLoading) return null;
+    if (!history.length) return null;
 
     return (
-        <div className="card-premium p-10 space-y-8 animate-slide-up">
-            <h3 className="text-2xl font-bold text-text-main flex items-center gap-3">
-                <Target className="w-6 h-6 text-primary-dark" />
-                Root Trigger Analysis
-            </h3>
-            <div className="h-[400px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                        data={data}
-                        layout="vertical"
-                        margin={{ left: 20, right: 40, top: 20, bottom: 20 }}
-                    >
-                        <XAxis type="number" hide />
-                        <YAxis
-                            dataKey="name"
-                            type="category"
-                            width={180}
-                            axisLine={false}
-                            tickLine={false}
-                            tick={(props) => {
-                                const { x, y, payload } = props;
-                                const label = payload.value.length > 25 ? payload.value.substring(0, 22) + '...' : payload.value;
-                                return (
-                                    <text x={x} y={y} dy={4} textAnchor="end" fill="#7A6A5E" fontSize={12} fontWeight={600}>
-                                        {label}
-                                    </text>
-                                );
-                            }}
-                        />
-                        <Tooltip
-                            cursor={{ fill: 'rgba(255, 179, 71, 0.05)' }}
-                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
-                        />
-                        <Bar
-                            dataKey="value"
-                            radius={[0, 8, 8, 0]}
-                            barSize={24}
-                        >
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
+        <div className="card-premium p-10 space-y-8 animate-slide-up bg-white">
+            <div className="flex items-center justify-between">
+                <h3 className="text-2xl font-bold text-text-main flex items-center gap-3">
+                    <Book className="w-6 h-6 text-[#FFB347]" />
+                    Clinical Notebook
+                </h3>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
+                    {history.length} Saved Entries
+                </span>
             </div>
-            <p className="text-sm text-text-muted font-light italic text-center">
-                Detected recurring environmental and internal factors influencing your emotional state.
+
+            <div className="grid gap-6">
+                {history.slice(0, 5).map((entry, i) => (
+                    <div key={entry.id} className="p-6 rounded-[1.5rem] bg-[#FFFBF5] border border-orange-100/50 hover:border-orange-200 transition-all group">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center text-sm">
+                                    {entry.sentiment.emotion === 'Joy' ? '☀️' : entry.sentiment.emotion === 'Anxiety' ? '🌊' : '☁️'}
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-text-main">
+                                        {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </p>
+                                    <p className="text-[10px] text-text-muted uppercase tracking-wider">{entry.sentiment.emotion}</p>
+                                </div>
+                            </div>
+                            <div className="px-2 py-1 bg-white rounded-lg border border-orange-50 text-[10px] font-bold text-orange-600">
+                                Intensity: {entry.sentiment.intensity}
+                            </div>
+                        </div>
+                        <p className="text-sm text-text-main font-light leading-relaxed line-clamp-2 italic opacity-80">
+                            "{entry.content}"
+                        </p>
+                        {entry.sentiment.triggers && (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                {entry.sentiment.triggers.split(',').map((tag, j) => (
+                                    <span key={j} className="text-[9px] font-bold uppercase tracking-tighter px-2 py-0.5 bg-orange-100/50 text-orange-700 rounded-md">
+                                        {tag.trim()}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            <p className="text-xs text-text-muted font-light italic text-center pt-4 border-t border-orange-50">
+                Your historical record of emotional evolution and clinical progress.
             </p>
         </div>
     );
@@ -274,8 +278,8 @@ const MoodDashboard = ({ refreshTrigger }) => {
             {/* Prediction Section */}
             <MoodPrediction refreshTrigger={refreshTrigger} />
 
-            {/* Trigger Chart Section */}
-            <TriggerChart refreshTrigger={refreshTrigger} />
+            {/* Notebook Section */}
+            <JournalHistory refreshTrigger={refreshTrigger} />
 
             <div className="text-center">
                 <p className="text-xs text-text-muted/60 uppercase tracking-[0.3em] font-medium">
