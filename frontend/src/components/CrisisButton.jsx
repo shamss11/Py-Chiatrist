@@ -49,21 +49,21 @@ const CrisisButton = () => {
                                     <Phone className="w-6 h-6" />
                                 </div>
                                 <h4 className="font-bold text-xl text-text-main mb-2">Crisis Lifeline</h4>
-                                <p className="text-red-700/80 text-sm font-medium mb-4">Call or Text 988 (USA)</p>
+                                <p className="text-red-700/80 text-sm font-medium mb-4">Call or Text 988 (Canada)</p>
                                 <div className="flex items-center gap-2 text-xs font-bold text-red-600/60 uppercase tracking-widest mt-auto">
                                     Available 24/7 <ExternalLink className="w-3 h-3" />
                                 </div>
                             </a>
 
                             <a
-                                href="sms:741741"
+                                href="sms:686868"
                                 className="flex flex-col p-8 bg-blue-50/30 rounded-[2rem] border border-blue-100/50 hover:bg-blue-50/50 hover:border-blue-200 transition-all group"
                             >
                                 <div className="bg-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform">
                                     <MessageSquare className="w-6 h-6" />
                                 </div>
                                 <h4 className="font-bold text-xl text-text-main mb-2">Crisis Text Line</h4>
-                                <p className="text-blue-700/80 text-sm font-medium mb-4">Text HOME to 741741</p>
+                                <p className="text-blue-700/80 text-sm font-medium mb-4">Text CONNECT to 686868</p>
                                 <div className="flex items-center gap-2 text-xs font-bold text-blue-600/60 uppercase tracking-widest mt-auto">
                                     Encrypted Messaging <ExternalLink className="w-3 h-3" />
                                 </div>
