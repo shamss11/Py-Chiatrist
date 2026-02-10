@@ -73,21 +73,33 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
         # 5. Extract Sentiment Data using regex
         import json
         import re
+        
+        # Look for SENTIMENT_DATA anywhere, potentially wrapped in markdown
         ai_msg = full_text
         primary_emotion = "Neutral"
         intensity = 5.0
         triggers = "Unknown"
 
-        match = re.search(r"SENTIMENT_DATA: (\{.*\})", full_text)
+        # Match SENTIMENT_DATA followed by JSON, ignoring potential markdown surrounding it
+        match = re.search(r"SENTIMENT_DATA:\s*(\{.*\})", full_text, re.DOTALL)
         if match:
             try:
                 sentiment_json = json.loads(match.group(1))
                 primary_emotion = sentiment_json.get("emotion", "Neutral")
                 intensity = float(sentiment_json.get("intensity", 5.0))
                 triggers = sentiment_json.get("triggers", "Unknown")
-                # Clean the response text of the metadata
-                ai_msg = full_text.split("SENTIMENT_DATA:")[0].strip()
-            except:
+                
+                # Robustly clean the AI message:
+                # 1. Split at the sentiment label
+                parts = full_text.split("SENTIMENT_DATA:")
+                msg_part = parts[0].strip()
+                
+                # 2. Strip trailing markdown artifacts if Gemini wrapped the whole data block
+                # Remove occurrences like ```json or ``` at the end of the message part
+                msg_part = re.sub(r"```(json)?\s*$", "", msg_part).strip()
+                ai_msg = msg_part
+            except Exception as e:
+                print(f"Sentiment parsing error: {e}")
                 pass
 
         # 6. Store in Database

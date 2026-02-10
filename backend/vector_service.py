@@ -8,7 +8,14 @@ COLLECTION_NAME = "clinical_knowledge"
 
 # Initialize ChromaDB
 client = chromadb.PersistentClient(path=CHROMA_DB_DIR)
-sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+
+try:
+    from chromadb.utils import embedding_functions
+    sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+except Exception as e:
+    print(f"Warning: Could not initialize SentenceTransformer (likely due to torch/numpy issues): {e}")
+    # Fallback to default or none (ChromaDB will use its default or error later, but we can catch it)
+    sentence_transformer_ef = None
 
 collection = client.get_or_create_collection(
     name=COLLECTION_NAME,
