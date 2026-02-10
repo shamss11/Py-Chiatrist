@@ -95,8 +95,8 @@ async def submit_journal(submission: JournalSubmission, db: Session = Depends(ge
                 msg_part = parts[0].strip()
                 
                 # 2. Strip trailing markdown artifacts if Gemini wrapped the whole data block
-                # Remove occurrences like ```json or ``` at the end of the message part
-                msg_part = re.sub(r"```(json)?\s*$", "", msg_part).strip()
+                # Remove ANY combination of trailing backticks, 'json' labels, and whitespace
+                msg_part = re.sub(r"[\s`]*(json)?[\s`]*$", "", msg_part).strip()
                 ai_msg = msg_part
             except Exception as e:
                 print(f"Sentiment parsing error: {e}")
